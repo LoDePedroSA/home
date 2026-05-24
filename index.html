@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>LoDePedro S.A. | LDP Studios</title>
+    <link rel="stylesheet" href="./Assets/styles.css">
+    <link rel="icon" href="./Assets/Logo Nuevo LDP.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="loader-wrapper" id="loader">
+    <div class="loader"></div>
+</div>
+
+<nav>
+    <button class="nav-btn" data-tab="inicio">Inicio</button>
+    <button class="nav-btn" data-tab="models">Nuestros Modelos</button>
+    <button class="nav-btn" data-tab="p-frecuentes">Preguntas Frecuentes</button>
+</nav>
+
+<div class="page-container">
+    <!-- PESTAÑA INICIO -->
+    <div id="inicio" class="tab-content">
+        <img src="./Assets/Banner Nuevo LDP.png" alt="Banner de LDP" class="banner-img reveal" onerror="this.onerror=null; this.src='https://placehold.co/1200x400/1e293b/3b82f6?text=Banner+LDP';">
+        <div class="card reveal">
+            <h2>Preguntas frecuentes:</h2>
+            <p>Si quieres ver las preguntas frecuentes, haz click en el siguiente boton:</p>
+            <button class="btn-primary" id="goToFaqBtn">Ir a ver las Preguntas frecuentes</button>
+        </div>
+        <div class="card reveal">
+            <h2>¿Quieres ver nuestros modelos/proyectos publicados?</h2>
+            <p>Si quieres ver nuestros diferentes tipos de proyectos, haz click en el siguiente boton:</p>
+            <button class="btn-primary" id="goToModelsBtn">Ir a ver los modelos</button>
+        </div>
+        <div class="card reveal">
+            <h2>¿Quieres ver nuestras politicas?</h2>
+            <p>Si quieres ver nuestras politicas, haz click en el siguiente boton:</p>
+            <button class="btn-primary" id="goToPoliciesBtn">Ir a ver las politicas</button>
+        </div>        
+    </div>
+
+    <!-- PESTAÑA PREGUNTAS FRECUENTES -->
+    <div id="p-frecuentes" class="tab-content">
+        <h1 class="reveal">📖 Preguntas frecuentes</h1>
+        <div class="faq-list reveal">
+            <div class="faq-item">
+                <div class="faq-question">¿Qué es LoDePedro S.A.? <span>▼</span></div>
+                <div class="faq-answer">
+                    <p>LoDePedro S.A. o LDP es una empresa no muy grande, que hace sitios webs a pedido. Ya que contamos con herramientas que nos facilitan acceder a un mejor resultado que la competencia.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">¿Qué incluye exactamente el servicio que ofrecen? <span>▼</span></div>
+                <div class="faq-answer">
+                    <p>Por ahora, las webs las estamos haciendo de manera gratuita para hacernos llegar a mas personas. Lo que incluye nuestro servicio es:</p>
+                    <ul>
+                        <li>Crear la pagina a tu gusto (colores, logos, animaciones, etc).</li>
+                        <li>Actualizar los contenidos cada vez que sea necesario.</li>
+                        <li>Una base de datos de Google.</li>
+                        <li>Soporte dentro de 09:00am a 01:00am</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">¿El servicio se adapta a mis necesidades específicas? <span>▼</span></div>
+                <div class="faq-answer">
+                    <p>Sí, literalmente sí. Nosotros nos encargaremos que tu web quede identica a lo que buscas.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">¿Cuáles son los métodos de pago aceptados? <span>▼</span></div>
+                <div class="faq-answer">
+                    <p>El unico metodo que aceptamos es transferencia bancaria al alias: "PEDRO.202.BSSO". Igualmente, por ahora no estamos cobrando pero aceptamos donaciones.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESTAÑA MODELOS (Slider automático + QR + Ruleta Rusa extra) -->
+    <div id="models" class="tab-content">
+        <h1 class="reveal">🚀 Nuestros Modelos & Herramientas</h1>
+        
+        <!-- SLIDER AUTOMÁTICO tipo cinta rotativa -->
+        <div class="slider-container reveal">
+            <div class="slider-track" id="sliderTrack"></div>
+        </div>
+
+        <!-- Ruleta Rusa (simple demo) + Creador de QR -->
+        <div class="extra-tools reveal">
+            <div class="tool-box">
+                <h3>🎲 Ruleta Rusa (suerte)</h3>
+                <input type="text" id="ruletaNombres" placeholder="Nombres separados por coma (ej: Ana,Luis,Pedro)" value="Ana,Luis,Carlos">
+                <button id="spinRuletaBtn">Girar Ruleta 🔫</button>
+                <p id="ruletaResultado" style="margin-top: 12px; font-weight: bold;"></p>
+            </div>
+            <div class="tool-box">
+                <h3>📱 Creador de Códigos QR</h3>
+                <input type="text" id="qrText" placeholder="Texto o URL" value="https://ldp-studios.com">
+                <button id="generateQRBtn">Generar QR</button>
+                <div id="qrcode" class="qr-code-container"></div>
+            </div>
+        </div>
+        <p class="reveal" style="margin-top: 5px; font-style:italic; font-size:0.85rem;">⭐ Los catálogos rotan automáticamente cada 2 segundos. Toca cualquier tarjeta para abrir el proyecto.</p>
+    </div>
+</div>
+
+<footer>
+    <h3>📞 Contactanos:</h3>
+    <div class="footer-links">
+        <span class="contact-item" data-contact="wa">+54 221 598-9210</span>
+        <span class="contact-item" data-contact="mail">pedrogabrielojeda664@gmail.com</span>
+        <span class="contact-item" data-contact="ig">@ldp_studios664</span>
+    </div>
+    <hr>
+    <p>© 2026 LoDePedro S.A. · Todos los derechos reservados</p>
+</footer>
+<script src="./Assets/script.js"></script>
+</body>
+</html>

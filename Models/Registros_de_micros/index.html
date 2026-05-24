@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros de Micros</title>
+    <link rel="icon" type="image/jpeg" href="Logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9500 0%, #ffb84d 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: #ff8c00;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid #e67e00;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+        .container {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+        .content {
+            max-width: 800px;
+            width: 100%;
+        }
+        .pestana {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+        .pestana.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .logo-grande {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 30px auto;
+            border: 5px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: block;
+        }
+        .recuadro {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            border-left: 5px solid #ff8c00;
+        }
+        h2 {
+            color: #ff8c00;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        .separador {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #ff9500, transparent);
+            margin: 20px 0;
+        }
+        p {
+            color: #333;
+            margin: 15px 0;
+            font-size: 1.1em;
+        }
+        label {
+            display: block;
+            color: #ff8c00;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        select, input[type="time"], input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ffb84d;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: #fff9f0;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        select:hover, input[type="time"]:hover, input[type="text"]:hover {
+            border-color: #ff8c00;
+            background-color: #fff5e6;
+        }
+        select:focus, input[type="time"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #ff8c00;
+            box-shadow: 0 0 8px rgba(255, 140, 0, 0.3);
+        }
+        .botones {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 25px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            min-width: 200px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff8c00 0%, #ff7b00 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #ff9500 0%, #ff8c00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 140, 0, 0.3);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffb84d 0%, #ff9500 100%);
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #ffc66b 0%, #ffb84d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 180, 77, 0.3);
+        }
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+        #viajes {
+            background-color: #fff9f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .viaje-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff8c00;
+            transition: all 0.3s ease;
+        }
+        .viaje-item:hover {
+            box-shadow: 0 4px 8px rgba(255, 140, 0, 0.2);
+            transform: translateX(5px);
+        }
+        .viaje-item p {
+            margin: 8px 0;
+            font-size: 1em;
+        }
+        .viaje-item strong {
+            color: #ff8c00;
+        }
+        .btn-eliminar {
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(255, 68, 68, 0.2);
+            margin-top: 15px;
+            width: 100%;
+        }
+        .btn-eliminar:hover {
+            background: linear-gradient(135deg, #ff5555 0%, #dd1111 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(255, 68, 68, 0.3);
+        }
+        .btn-eliminar:active {
+            transform: translateY(0);
+        }
+        footer {
+            background-color: #ff8c00;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-top: 3px solid #e67e00;
+            font-size: 0.9em;
+            margin-top: auto;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            .container {
+                padding: 15px;
+            }
+            .recuadro {
+                padding: 20px;
+            }
+            .botones {
+                flex-direction: column;
+            }
+            button {
+                min-width: 100%;
+            }
+            .logo-grande {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.4em;
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+            .recuadro {
+                padding: 15px;
+            }
+            h2 {
+                font-size: 1.4em;
+            }
+            button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="Logo.png" alt="Logo" class="logo">
+            <h1>📋 Registros de Micros</h1>
+        </div>
+    </header>
+    <div class="container">
+        <div class="content">
+            <div id="pestana-inicio" class="pestana active">
+                <img src="Logo.png" alt="Logo Principal" class="logo-grande">
+                <div class="recuadro">
+                    <h2>Agregar a los Registros un viaje:</h2>
+                    <p style="text-align: center; color: #666;">Registra un nuevo viaje completando los datos requeridos.</p>
+                    <div class="botones">
+                        <button class="btn-primary" onclick="irANuevo()">Ir a Agregar un Nuevo Viaje</button>
+                    </div>
+                </div>
+                <div class="recuadro">
+                    <h2>Ver tus viajes:</h2>
+                    <p style="text-align: center; color: #666;">Consulta el historial de todos tus viajes registrados.</p>
+                    <div class="botones">
+                        <button class="btn-primary" onclick="irAHistorial()">Ir a Ver mis Viajes</button>
+                    </div>
+                </div>
+            </div>
+            <div id="pestana-nuevo" class="pestana">
+                <img src="Logo.png" alt="Logo" class="logo-grande">
+                <div class="recuadro">
+                    <h2>Información del Viaje</h2>
+                    <hr class="separador">
+                    <label for="selectLinea">Seleccione la Línea:</label>
+                    <select id="selectLinea">
+                        <option value="">-- Seleccione una línea --</option>
+                    </select>
+                    <label for="selectRamal">Seleccione el Ramal:</label>
+                    <select id="selectRamal">
+                        <option value="">-- Seleccione un ramal --</option>
+                    </select>
+                    <div class="botones">
+                        <button class="btn-secondary" onclick="recargarRamales()">Recargar 🔄</button>
+                    </div>
+                    <label for="ubicacionSubida">Ubicación en donde te subiste:</label>
+                    <input type="text" id="ubicacionSubida" placeholder="Ej: Estación Central">
+                    <label for="ubicacionBajada">Ubicación en donde te bajaste:</label>
+                    <input type="text" id="ubicacionBajada" placeholder="Ej: Plaza Mayor">
+                    <label for="interno">Interno:</label>
+                    <input type="text" id="interno" placeholder="Ej: 12" maxlength="5">
+                </div>
+                <div class="recuadro">
+                    <h2>Horarios:</h2>
+                    <hr class="separador">
+                    <label for="horarioSubida">Ingrese el horario en el que se subió:</label>
+                    <input type="time" id="horarioSubida" value="00:00">
+                    <label for="horarioBajada">Ingrese el horario en el que se bajó:</label>
+                    <input type="time" id="horarioBajada" value="00:00">
+                </div>
+                <div class="botones" style="margin-bottom: 30px;">
+                    <button class="btn-primary" onclick="cargarNuevoViaje()">Enviar 📨</button>
+                </div>
+            </div>
+            <div id="pestana-historial" class="pestana">
+                <div class="recuadro">
+                    <h2>Mis Viajes</h2>
+                    <hr class="separador">
+                    <div id="viajes"></div>
+                </div>
+                <div class="botones" style="margin-bottom: 30px;">
+                    <button class="btn-secondary" onclick="recargarViajes()">Recargar 🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <button class="btn-secondary" onclick="irAInicio()">Ir al Inicio 🏠</button>
+        <p>© 2022 LoDePedro - Todos los derechos reservados</p>
+        <p>© 2025 LoDePedro Studios - Licenciado bajo CC BY 4.0</p>
+        <p>© 2026 Registros de Micros - Todos los derechos reservados</p>
+    </footer>
+    <script src="storage.js"></script>
+    <script src="script.js"></script>
+    <script src="script2.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            cambiarPestana('inicio');
+        });
+    </script>
+</body>
+</html>

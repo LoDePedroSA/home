@@ -1,0 +1,7 @@
+Hagamos esto, un HTML que tenga: HTML + JS + CSS.
+Este HTML funcionara asi:
+1. Se verifica la URL: [la ubicacion en donde esta]/downloader.html=?[lo que diga aqui, se guardara en la const: "archivo"]
+2. Se manda a descargar el archivo: "./[const=archivo]"
+3.1. Si se descargo correctamente, al usuario le saldra un texto que dira: "[archivo] se a descargado correctamente."
+3.2. Si no se descargo, al usuario le saldra un texto que dira: "[archivo] se no se a podido descargar."
+4. Aqui termina.

@@ -1,0 +1,9 @@
+Creame un Documento Legal, Condiciones de Uso y Política de Privacidad (PDF) para mi Empresa LoDePedro S.A.
+
+Infromacion asi la tienes en cuenta al momento de crearlo: {
+    - El dueño de la empresa es: Pedro Gabriel Ojeda.
+    - LoDePedro S.A. crea sistemas (HTML, JS, CSS, Python, LUA).
+    - Para contactarte con el dueño, lo podes hacer con el +542215989210 o pedrogabrielojeda664@gmail.com
+    - Las cookies y archivos en las base de datos son utilizados nada mas par aque los sistemas internos funcionen, por ejemplo: Hola [nombre de usuario]. No se utilizan para nada mas fuera de aqui.
+    - Los modelos de LoDePedro S.A. son unicamente utilizarlo como usuario. Si los modificas y los publicas si un permiso oficial, puedes ser demandado.
+}

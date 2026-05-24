@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta Rusa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="setup-container">
+        <h1>Configurar Partida</h1>
+        <label for="num-players">Cantidad de Jugadores (2-6):</label>
+        <input type="number" id="num-players" min="2" max="6" value="4">
+        <div id="players-inputs"></div>
+        <button id="start-game">Comenzar</button>
+    </div>
+
+    <div id="game-container" style="display: none;">
+        <h1>Ruleta Rusa</h1>
+        <div id="players"></div>
+        <div id="controls">
+            <button id="shoot-btn">Disparar</button>
+            <button id="pass-btn">Pasar</button>
+        </div>
+        <p id="game-status"></p>
+    </div>
+
+    <!-- Sonidos -->
+    <audio id="spin-sound" src="spin.mp3"></audio>
+    <audio id="shot-sound" src="shot.mp3"></audio>
+    <audio id="click-sound" src="click.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>

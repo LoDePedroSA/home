@@ -1,0 +1,145 @@
+Hagamos un HTML + JS + CSS para mi web.
+
+Info para los estilos: {
+    Usar colores oscuros.
+    Hacer animaciones de carga (cuando se abre la web)
+    Que al ir bajando, como que aparezcan los elementos.
+    Haz como un dezlizador automatico, es decir, que cada tanto se va rotando un cinta es decir: [contenido1] [contenido2] [contenido3] se muestran y despues de 1 segundo, se muestran: [contenido2] [contenido3] [contenido4]  y asi etc.
+    Hacer animaciones cuando se cambia de pestaña, se tocan elementos (buttons, inputs).
+}
+
+Configuracion de la Barra de Navegacion: 
+Boton: {
+    Texto: "Inicio"
+    Funcion: El usuario sera llevado a la pestaña: "inicio"
+}
+Boton: {
+    Texto: "Nuestros Modelos"
+    Funcion: El usuario sera llevado a la pestaña: "models" 
+}
+
+Configuracion de la pestaña: "inicio"
+IMG: {
+    src: "./Assets/Banner Nuevo LDP.png"
+    Alt: Banner de LDP
+}
+
+Recuadro: {
+    Titulo (h2): "Preguntas frecuentes:"
+    Texto (p): "Si quieres ver las preguntas frecuentes, haz click en el siguiente boton:"
+    Boton: {
+        Texto: "Ir a ver las Preguntas frecuentes"
+        Funcion: El usuario sera llevado a la pestaña: "p-frecuentes"
+    }
+}
+
+Recuadro: {
+    Titulo (h2): "¿Quieres ver nuestros modelos/proyectos publicados?"
+    Texto: "Si quieres ver nuestro diferentes tipos de proyectos, haz click en elsiguiente boton:
+    Boton: {
+        Texto: "Ir a ver los modelos"
+        Funcion: El usuario sera llevado a la pestaña: "models"
+    }
+}
+
+Configuracion de la pestaña: "p-frecuentes"
+Titulo (h1): "Preguntas frecuentes"
+Recuadro: {
+    Tipo: titular (este se basa en que solo se ve el titulo (que es lo que va ahora) y cuando el usuario haga click, de adentro de este recuadro, saldra otro, con la respuesta de la pregunta).
+    Titular: "¿Qué es LoDePedro S.A.?"
+    Recuadro (oculto por ahora): {
+        Texto (p): "LoDePedro S.A. o LDP es una empresa no muy grande, que hace sitios webs a pedido. Ya que contamos con herramientas que nos facilitan acceder a un mejor resultado que las competencia."
+    }
+}
+
+Recuadro: {
+    Tipo: titular (este se basa en que solo se ve el titulo (que es lo que va ahora) y cuando el usuario haga click, de adentro de este recuadro, saldra otro, con la respuesta de la pregunta).
+    Titular: "¿Qué incluye exactamente el servicio que ofrecen?"
+    Recuadro (oculto por ahora): {
+        Texto (p): "Por ahora, las webs las estamos haciendo de manera gratuita para hacernos llegar a mas personas. Lo que incluye nuestro servicio es:"
+        Lista: {
+            - "Crear la pagina a tu gusto (colores, logos, animaciones, etc)."
+            - "Actualizar los contenidos cada vez que sea necesario."
+            - "Una base de datos de Google."
+            - "Soporte dentro de 09:00am a 01:00am"
+        }
+    }
+}
+
+Recuadro: {
+    Tipo: titular (este se basa en que solo se ve el titulo (que es lo que va ahora) y cuando el usuario haga click, de adentro de este recuadro, saldra otro, con la respuesta de la pregunta).
+    Titular: "¿El servicio se adapta a mis necesidades específicas?"
+    Recuadro (oculto por ahora): {
+        Texto (p): "Sí, literalmete si. Nosotros nos encargaremos que tu web quede identica a lo que buscas."
+    }
+}
+
+Recuadro: {
+    Tipo: titular (este se basa en que solo se ve el titulo (que es lo que va ahora) y cuando el usuario haga click, de adentro de este recuadro, saldra otro, con la respuesta de la pregunta).
+    Titular: "¿Cuáles son los métodos de pago aceptados?"
+    Recuadro (oculto por ahora): {
+        Texto (p): "El unico metodo que aceptamos en transferencia bancaria al allias: "PEDRO.202.BSSO". Igualmente, por ahora no estamos conbrando pero aceptamos donaciones."
+    }
+}
+
+Configuracion de la pestaña: "models"
+Ruleta Rusa
+Creador de Codigos QR
+Recuadro {
+    Tipo: Catalogo (este es un minu cuadradito rectangular que esta junto a otros y al hacer click lleva a un figerente lugar)
+    Este lleva a: "https://betldpoficial-sudo.github.io/bet-ldp/"
+    Titulo (h3): "BetLDP"
+    Texto: "Es un casino ficticio, puedes meter dinero mediante cupones como: NUEVO USUARIO o pagando en +542215989210..."
+}
+Recuadro {
+    Tipo: Catalogo (este es un minu cuadradito rectangular que esta junto a otros y al hacer click lleva a un figerente lugar)
+    Este lleva a: ".Models/Descargador_de_Archivos.bat"
+    Titulo (h3): "Descargador de Archivos.bat"
+    Texto: "Es un modelo .bat que vos introducis la URL del archivo a descargar, seleccionas la ubicacion a descargar y listo..."
+}
+Recuadro {
+    Tipo: Catalogo (este es un minu cuadradito rectangular que esta junto a otros y al hacer click lleva a un figerente lugar)
+    Este lleva a: ".Models/Mercado_en_Progreso.html"
+    Titulo (h3): "Mercado en Progreso"
+    Texto: "Un minijuego fuera de mantenimiento que trata de comprar y revender objetos ficticios..."
+}
+Recuadro {
+    Tipo: Catalogo (este es un minu cuadradito rectangular que esta junto a otros y al hacer click lleva a un figerente lugar)
+    Este lleva a: ".Models/Registros_de_micros.html"
+    Titulo (h3): "Registros de micros"
+    Texto: "Aqui vos podes cargar tus registros de viajes, estan cargadas las lineas y recorridos de Union Platense S.A. Así que si eres de esa zona, ya la puesdes utilizar..."
+}
+Recuadro {
+    Tipo: Catalogo (este es un minu cuadradito rectangular que esta junto a otros y al hacer click lleva a un figerente lugar)
+    Este lleva a: ".Models/Ruleta_Rusa.html"
+    Titulo (h3): "Ruleta Rusa"
+    Texto: "Cargas los nombre de los participantes y puedes desafiar a la suerte..."
+}
+Recuadro {
+    Tipo: Catalogo (este es un minu cuadradito rectangular que esta junto a otros y al hacer click lleva a un figerente lugar)
+    Este lleva a: ".Models/Creador_de_Codigos_QR.html"
+    Titulo (h3): "Creador de Codigos QR"
+    Texto: "Un Creador de Codigos QR online que se le puede perzonalizar el color, contenido y destinatario."
+}
+Recuadro {
+    Tipo: Catalogo (este es un minu cuadradito rectangular que esta junto a otros y al hacer click lleva a un figerente lugar)
+    Este lleva a: ".Models/Acortador de URLS.html"
+    Titulo (h3): "Acortador de URLS"
+    Texto: "Un acortador de URLS potenciado por Google y GitHUB..."
+}
+
+Configuracion del pie de pagina:
+Titulo (h3): "Contactanos:"
+Texto: {
+    Contenido: "+54 221 598-9210"
+    Si se hace click: al usuario se le abre una nueva pestaña en la URL: "https://wa.me/+542215989210"
+}
+Texto: {
+    Contenido: "pedrogabrielojeda664@gmail.com"
+    Si se hace click: al usuario se le abre una nueva pestaña en la URL: "mailto:pedrogabrielojeda664@gmail.com"
+}
+Texto: {
+    Contenido: "@ldp_studios664"
+    Si se hace click: al usuario se le abre una nueva pestaña en la URL: "https://www.instagram.com/ldp_studios664/"
+}
+Texto: "© 2026 LoDePedro S.A. · Todos los derechos reservados"

@@ -1,0 +1,93 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #222;
+    color: white;
+}
+
+#setup-container, #game-container {
+    margin: 50px auto;
+    padding: 20px;
+    width: 400px;
+    background: linear-gradient(135deg, #444, #222);
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+}
+
+h1 {
+    font-size: 24px;
+    color: gold;
+}
+
+label, input {
+    margin: 10px;
+    display: block;
+}
+
+#players-inputs input {
+    margin-bottom: 5px;
+}
+
+#players {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.player {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.dead {
+    text-decoration: line-through;
+    color: red;
+    opacity: 0.5;
+}
+
+button {
+    padding: 15px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#shoot-btn {
+    background: linear-gradient(135deg, red, darkred);
+}
+
+#pass-btn {
+    background: linear-gradient(135deg, green, darkgreen);
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+/* Efectos */
+@keyframes flash {
+    0% { background-color: red; }
+    100% { background-color: #222; }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+.flash-effect {
+    animation: flash 0.3s ease-in-out;
+}
+
+.shake-effect {
+    animation: shake 0.3s ease-in-out;
+}
