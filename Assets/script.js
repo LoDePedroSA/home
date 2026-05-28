@@ -26,6 +26,7 @@ function buildMarketplaceGrid() {
         });
         grid.appendChild(cardDiv);
     });
+    triggerReveal();
 }
 
 
