@@ -78,31 +78,11 @@
         </div>
     </div>
 
-    <!-- PESTAÑA MODELOS (Slider automático + QR + Ruleta Rusa extra) -->
+    <!-- PESTAÑA MODELOS (Catálogo Marketplace) -->
     <div id="models" class="tab-content">
         <h1 class="reveal">🚀 Nuestros Modelos & Herramientas</h1>
-        
-        <!-- SLIDER AUTOMÁTICO tipo cinta rotativa -->
-        <div class="slider-container reveal">
-            <div class="slider-track" id="sliderTrack"></div>
-        </div>
-
-        <!-- Ruleta Rusa (simple demo) + Creador de QR -->
-        <div class="extra-tools reveal">
-            <div class="tool-box">
-                <h3>🎲 Ruleta Rusa (suerte)</h3>
-                <input type="text" id="ruletaNombres" placeholder="Nombres separados por coma (ej: Ana,Luis,Pedro)" value="Ana,Luis,Carlos">
-                <button id="spinRuletaBtn">Girar Ruleta 🔫</button>
-                <p id="ruletaResultado" style="margin-top: 12px; font-weight: bold;"></p>
-            </div>
-            <div class="tool-box">
-                <h3>📱 Creador de Códigos QR</h3>
-                <input type="text" id="qrText" placeholder="Texto o URL" value="https://ldp-studios.com">
-                <button id="generateQRBtn">Generar QR</button>
-                <div id="qrcode" class="qr-code-container"></div>
-            </div>
-        </div>
-        <p class="reveal" style="margin-top: 5px; font-style:italic; font-size:0.85rem;">⭐ Los catálogos rotan automáticamente cada 2 segundos. Toca cualquier tarjeta para abrir el proyecto.</p>
+        <div class="marketplace-grid reveal" id="modelsGrid"></div>
+        <p class="reveal" style="margin-top: 20px; font-style:italic; font-size:0.85rem; text-align: center;">📌 Haz click en cualquier tarjeta para abrir el proyecto</p>
     </div>
 </div>
 
