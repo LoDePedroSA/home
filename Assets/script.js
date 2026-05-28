@@ -10,110 +10,25 @@ const modelsCatalog = [
     { title: "Programar Apagado Automatico", desc: "Programa el apagado de tu PC con opciones personalizadas.", link: "./Models/downloader.html?=Programar_apagado_automatico.zip" },
 ];
 
-let currentIndex = 0;
-let autoInterval = null;
-const track = document.getElementById('sliderTrack');
-let cardsPerView = 3;
-
-function getCardsPerView() {
-    if (window.innerWidth < 720) return 1;
-    if (window.innerWidth < 1000) return 2;
-    return 3;
-}
-
-function buildSliderItems() {
-    if (!track) return;
-    function getVisibleModels() {
-        let visible = [];
-        for (let i = 0; i < cardsPerView; i++) {
-            let idx = (currentIndex + i) % modelsCatalog.length;
-            visible.push(modelsCatalog[idx]);
-        }
-        return visible;
-    }
-    function renderSlider() {
-        const visibleModels = getVisibleModels();
-        track.innerHTML = '';
-        visibleModels.forEach(model => {
-            const cardDiv = document.createElement('div');
-            cardDiv.className = 'model-card';
-            cardDiv.setAttribute('data-link', model.link);
-            cardDiv.innerHTML = `<h3>${escapeHtml(model.title)}</h3><p>${escapeHtml(model.desc)}</p>`;
-            cardDiv.addEventListener('click', (e) => {
-                e.stopPropagation();
-                window.open(model.link, '_blank');
-            });
-            track.appendChild(cardDiv);
+function buildMarketplaceGrid() {
+    const grid = document.getElementById('modelsGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    modelsCatalog.forEach(model => {
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'model-card';
+        cardDiv.setAttribute('data-link', model.link);
+        cardDiv.innerHTML = `<div><h3>${escapeHtml(model.title)}</h3><p>${escapeHtml(model.desc)}</p></div>`;
+        cardDiv.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.open(model.link, '_blank');
         });
-    }
-    renderSlider();
-}
-
-function rotateSliderForward() {
-    if (!modelsCatalog.length) return;
-    currentIndex = (currentIndex + 1) % modelsCatalog.length;
-    buildSliderItems();
-}
-
-function initAutoSlider() {
-    if (autoInterval) clearInterval(autoInterval);
-    autoInterval = setInterval(() => {
-        const activeTab = document.querySelector('.tab-content.active-tab');
-        if (activeTab && activeTab.id === 'models') {
-            rotateSliderForward();
-        }
-    }, 2000);
-}
-
-function handleResize() {
-    const newPerView = getCardsPerView();
-    if (cardsPerView !== newPerView) {
-        cardsPerView = newPerView;
-        buildSliderItems();
-    }
-}
-window.addEventListener('resize', handleResize);
-
-const ruletaBtn = document.getElementById('spinRuletaBtn');
-const ruletaResult = document.getElementById('ruletaResultado');
-if (ruletaBtn) {
-    ruletaBtn.addEventListener('click', () => {
-        const inputNombres = document.getElementById('ruletaNombres').value;
-        let names = inputNombres.split(',').map(n => n.trim()).filter(n => n);
-        if (names.length === 0) names = ['Nadie'];
-        const randomIndex = Math.floor(Math.random() * names.length);
-        const loser = names[randomIndex];
-        ruletaResult.innerHTML = `💥 ¡${escapeHtml(loser)} ha perdido en la ruleta rusa! 💀`;
-        ruletaResult.style.animation = 'none';
-        ruletaResult.offsetHeight;
-        ruletaResult.style.animation = 'fadeUp 0.4s';
+        grid.appendChild(cardDiv);
     });
 }
 
-let qrCurrent = null;
-const genQrBtn = document.getElementById('generateQRBtn');
-const qrTextInput = document.getElementById('qrText');
-function generateQRCode(text) {
-    const qrDiv = document.getElementById('qrcode');
-    qrDiv.innerHTML = '';
-    if (!text) text = 'https://ldp-studios.com';
-    try {
-        new QRCode(qrDiv, {
-            text: text,
-            width: 150,
-            height: 150,
-            colorDark: "#ffffff",
-            colorLight: "#0a0c12",
-            correctLevel: QRCode.CorrectLevel.L
-        });
-    } catch(e) { qrDiv.innerHTML = `<p style="color:red;">Error creando QR</p>`; }
-}
-if (genQrBtn) {
-    genQrBtn.addEventListener('click', () => {
-        generateQRCode(qrTextInput.value);
-    });
-    generateQRCode('https://ldp-studios.com');
-}
+
 
 const faqQuestions = document.querySelectorAll('.faq-question');
 faqQuestions.forEach(q => {
@@ -148,8 +63,7 @@ function switchTab(tabId) {
     });
     if (tabId === 'models') {
         setTimeout(() => {
-            handleResize();
-            buildSliderItems();
+            buildMarketplaceGrid();
         }, 30);
     }
     triggerReveal();
@@ -168,9 +82,7 @@ document.getElementById('goToPoliciesBtn')?.addEventListener('click', () => {
 });
 
 switchTab('inicio');
-cardsPerView = getCardsPerView();
-buildSliderItems();
-initAutoSlider();
+buildMarketplaceGrid();
 
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
