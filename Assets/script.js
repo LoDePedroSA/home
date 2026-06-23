@@ -1,13 +1,13 @@
 const modelsCatalog = [
     { title: "BetLDP", desc: "Casino ficticio, mete dinero con cupones: NUEVO USUARIO o paga +542215989210...", link: "https://betldpoficial-sudo.github.io/bet-ldp/" },
-    { title: "Descargador de Archivos.bat", desc: "Modelo .bat: introducis la URL, seleccionas ubicación.", link: "./Models/downloader.html?=Descargador_de_Archivos.bat.zip" },
-    { title: "Mercado en Progreso", desc: "Minijuego de compra/venta de objetos ficticios.", link: "./Models/Mercado_en_Progreso.html" },
+    { title: "Descargador de Archivos.bat", desc: "Modelo .bat: introducis la URL, seleccionas ubicación.", link: "./Models/Descargador_de_Archivos.bat.zip" },
+    { title: "Mercado en Progreso", desc: "Minijuego de compra/venta de objetos ficticios.", link: "./Models/Mercado_en_Progreso/index.html" },
     { title: "Registros de micros", desc: "Carga registros de viajes, lineas y recorridos Union Platense S.A.", link: "./Models/Registros_de_micros/index.html" },
-    { title: "Ruleta Rusa", desc: "Carga participantes y desafía a la suerte.", link: "./Models/Ruleta_Rusa.html" },
-    { title: "Creador de Codigos QR", desc: "Personaliza color, contenido y destinatario.", link: "./Models/Creador_de_Codigos_QR.html" },
-    { title: "Acortador de URLS", desc: "Acortador potenciado por Google y GitHub.", link: "./Models/Acortador de URLS.html" },
-    { title: "Eliminador de Archivos Temporales", desc: "Limpia tu PC de archivos temporales innecesarios.", link: "./Models/downloader.html?=Eliminador_de_Archivos_Temporales.zip" },
-    { title: "Programar Apagado Automatico", desc: "Programa el apagado de tu PC con opciones personalizadas.", link: "./Models/downloader.html?=Programar_apagado_automatico.zip" },
+    { title: "Ruleta Rusa", desc: "Carga participantes y desafía a la suerte.", link: "./Models/Ruleta_Rusa/index.html" },
+    { title: "Creador de Codigos QR", desc: "Personaliza color, contenido y destinatario.", link: "./Models/Creador%20de%20Codigos%20QR.html" },
+    { title: "Acortador de URLS", desc: "Acortador potenciado por Google y GitHub.", link: "https://lodepedrosa.github.io/Acortador_de_URLS/" },
+    { title: "Eliminador de Archivos Temporales", desc: "Limpia tu PC de archivos temporales innecesarios.", link: "./Models/Eliminador_de_Archivos_Temporales.zip" },
+    { title: "Programar Apagado Automatico", desc: "Programa el apagado de tu PC con opciones personalizadas.", link: "./Models/Programar_apagado_automatico.zip" },
 ];
 
 function buildMarketplaceGrid() {
