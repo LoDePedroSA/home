@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../Assets/Logo Nuevo LDP.png" type="image/x-icon">
+    <title>CronoRuta - LDP Studios</title>
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --surface: #16213e;
+            --surface-light: #0f3460;
+            --primary: #e94560;
+            --secondary: #533483;
+            --accent: #0ea5e9;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: #334155;
+            --radius: 12px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 580px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ===== TARJETAS ===== */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        /* ===== SEPARADOR ===== */
+        .separator {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 4px 0;
+            opacity: 0.6;
+        }
+
+        /* ===== CONTADOR PRINCIPAL ===== */
+        .counter-header {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .counter-header span {
+            background: var(--surface-light);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .counter-header strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .time-display {
+            text-align: center;
+            font-size: 4.5rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+            letter-spacing: -2px;
+            padding: 16px 0;
+            transition: color 0.4s ease;
+        }
+
+        .time-display.going {
+            color: var(--success);
+            text-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+        }
+
+        .time-display.returning {
+            color: var(--danger);
+            text-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+        }
+
+        .time-display.paused {
+            color: var(--text-muted);
+        }
+
+        .phase-indicator {
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .phase-ida {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+        }
+
+        .phase-espera {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .phase-vuelta {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        .total-time {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+            padding: 8px;
+            background: var(--surface-light);
+            border-radius: 8px;
+        }
+
+        .total-time strong {
+            color: var(--accent);
+        }
+
+        /* ===== BOTONES ===== */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+            flex: 1;
+            min-width: 120px;
+            font-family: inherit;
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #0284c7;
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #16a34a;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            background: var(--surface-light);
+            border-color: var(--accent);
+        }
+
+        .btn-copy {
+            background: var(--secondary);
+            color: #fff;
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            font-size: 1rem;
+        }
+        .btn-copy:hover {
+            background: #6d28d9;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+
+        /* ===== FORMULARIO ===== */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-row input,
+        .input-row select {
+            flex: 1;
+        }
+
+        .input-row .btn {
+            flex: 0 0 auto;
+            min-width: auto;
+            padding: 10px 12px;
+            font-size: 0.75rem;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--surface-light);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        select option {
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow);
+        }
+
+        .modal h3 {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+        .modal .btn-group {
+            margin-top: 16px;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--success);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            z-index: 200;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===== RESULTADO ===== */
+        .result-panel {
+            display: none;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 16px;
+            white-space: pre-wrap;
+            font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result-panel.active {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .time-display {
+                font-size: 3rem;
+            }
+            .btn {
+                font-size: 0.75rem;
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- CONTADOR PRINCIPAL -->
+        <div class="card" id="counterCard">
+            <div class="counter-header">
+                <span>🚏 Ramal: <strong id="ramalDisplay">—</strong></span>
+                <span>🔢 Línea: <strong id="lineaDisplay">—</strong></span>
+            </div>
+
+            <div class="time-display paused" id="timeDisplay">+ 00:00</div>
+
+            <div style="text-align:center;">
+                <span class="phase-indicator phase-ida" id="phaseIndicator">⏳ Esperando inicio</span>
+            </div>
+
+            <div class="total-time" id="totalTimeDisplay">
+                Tiempo total: <strong>—</strong>
+            </div>
+        </div>
+
+        <!-- SEPARADOR -->
+        <div class="separator"></div>
+
+        <!-- CONTROL DEL CONTADOR -->
+        <div class="card">
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="abrirModal('ramal')">📝 Definir ramal</button>
+                <button class="btn btn-outline" onclick="abrirModal('linea')">📝 Definir línea</button>
+            </div>
+            <div class="btn-group" style="margin-top:10px;">
+                <button class="btn btn-success" id="btnIniciarIda" onclick="iniciarIda()">▶ Iniciar ramal - IDA</button>
+                <button class="btn btn-danger" id="btnFinalizarIda" onclick="finalizarIda()" disabled>⏹ Finalizar ramal - IDA</button>
+            </div>
+        </div>
+
+        <!-- SEPARADOR -->
+        <div class="separator"></div>
+
+        <!-- FORMULARIO -->
+        <div class="card">
+            <h3 style="margin-bottom:16px; font-size:1rem; color:var(--accent);">📋 Formulario para completar el formato</h3>
+
+            <div class="form-group">
+                <label>Ingrese su Nombre y Apellido:</label>
+                <input type="text" id="name" placeholder="Ej: Juan Pérez">
+            </div>
+
+            <div class="form-group">
+                <label>Ingrese su número de interno:</label>
+                <input type="text" id="int" placeholder="Ej: 4521">
+            </div>
+
+            <div class="form-group">
+                <label>Horario de Ingreso de Servicio:</label>
+                <div class="input-row">
+                    <input type="time" id="ing-srv">
+                    <button class="btn btn-outline" onclick="setNow('ing-srv')">🕐 Ahora</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Horario de Salida de la 1er Cabecera:</label>
+                <div class="input-row">
+                    <input type="time" id="sda-term-i">
+                    <button class="btn btn-outline" onclick="setNow('sda-term-i')">🕐 Ahora</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Horario de Llegada a la 2da Cabecera:</label>
+                <div class="input-row">
+                    <input type="time" id="llg-term-i">
+                    <button class="btn btn-outline" onclick="setNow('llg-term-i')">🕐 Ahora</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tiempo de descanso (minutos):</label>
+                <input type="number" id="receso" placeholder="Ej: 15" min="0" value="15">
+            </div>
+
+            <div class="form-group">
+                <label>Horario de Salida hacia la 1er Cabecera:</label>
+                <div class="input-row">
+                    <input type="time" id="sda-term-v">
+                    <button class="btn btn-outline" onclick="setNow('sda-term-v')">🕐 Ahora</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Horario de Llegada a la 1er Cabecera:</label>
+                <div class="input-row">
+                    <input type="time" id="llg-term-v">
+                    <button class="btn btn-outline" onclick="setNow('llg-term-v')">🕐 Ahora</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Seleccione el formato a completar:</label>
+                <select id="formatoSelect">
+                    <option value="" disabled selected>Seleccione un formato</option>
+                    <option value="linea12">Empresa Linea 12</option>
+                    <option value="merlo">Transportes Unidos de Merlo S.A.</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" style="width:100%;" onclick="completar()">📨 Enviar</button>
+
+            <!-- RESULTADO -->
+            <div class="result-panel" id="resultPanel"></div>
+            <button class="btn btn-copy" id="btnCopy" style="display:none;" onclick="copiarAlPortapapeles()">📋 Copiar al portapapeles</button>
+        </div>
+    </div>
+
+    <!-- MODAL PARA DEFINIR RAMAL/LÍNEA -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h3 id="modalTitle">Definir</h3>
+            <input type="text" id="modalInput" placeholder="Ingrese el valor...">
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirm">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">✅ Copiado al portapapeles</div>
+
+    <script>
+        // ===== VARIABLES GLOBALES =====
+        let ramal = '';
+        let linea = '';
+        let phase = 'idle'; // 'idle' | 'ida' | 'espera' | 'vuelta'
+        let idaTime = 0; // segundos acumulados de ida
+        let esperaTime = 0; // segundos acumulados de espera
+        let vueltaTime = 0; // segundos acumulados de vuelta
+        let currentSegmentStart = null; // timestamp de inicio del segmento actual
+        let timerInterval = null;
+        let currentElapsed = 0; // segundos transcurridos en el segmento actual
+
+        // ===== ELEMENTOS DOM =====
+        const timeDisplay = document.getElementById('timeDisplay');
+        const phaseIndicator = document.getElementById('phaseIndicator');
+        const totalTimeDisplay = document.getElementById('totalTimeDisplay');
+        const ramalDisplay = document.getElementById('ramalDisplay');
+        const lineaDisplay = document.getElementById('lineaDisplay');
+        const btnIniciarIda = document.getElementById('btnIniciarIda');
+        const btnFinalizarIda = document.getElementById('btnFinalizarIda');
+        const resultPanel = document.getElementById('resultPanel');
+        const btnCopy = document.getElementById('btnCopy');
+        const toast = document.getElementById('toast');
+
+        // ===== MODAL =====
+        let modalMode = '';
+
+        function abrirModal(mode) {
+            modalMode = mode;
+            document.getElementById('modalTitle').textContent = mode === 'ramal' ? 'Definir Ramal' : 'Definir Línea';
+            document.getElementById('modalInput').value = mode === 'ramal' ? ramal : linea;
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('modalInput').focus();
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        document.getElementById('modalConfirm').addEventListener('click', () => {
+            const valor = document.getElementById('modalInput').value.trim();
+            if (modalMode === 'ramal') {
+                ramal = valor;
+                ramalDisplay.textContent = valor || '—';
+            } else {
+                linea = valor;
+                lineaDisplay.textContent = valor || '—';
+            }
+            cerrarModal();
+        });
+
+        document.getElementById('modalInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('modalConfirm').click();
+            if (e.key === 'Escape') cerrarModal();
+        });
+
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) cerrarModal();
+        });
+
+        // ===== ACTUALIZAR DISPLAY =====
+        function formatTime(totalSeconds) {
+            const isNegative = totalSeconds < 0;
+            const abs = Math.abs(totalSeconds);
+            const mins = Math.floor(abs / 60);
+            const secs = abs % 60;
+            const sign = isNegative ? '- ' : '+ ';
+            return sign + String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        }
+
+        function updateDisplay() {
+            // Calcular tiempo del segmento actual
+            if (currentSegmentStart && phase !== 'idle') {
+                currentElapsed = Math.floor((Date.now() - currentSegmentStart) / 1000);
+            }
+
+            let displayTime = 0;
+            let cssClass = 'paused';
+
+            if (phase === 'ida') {
+                // Cuenta regresiva desde 10 minutos (600s) menos lo acumulado
+                const remaining = 600 - (idaTime + currentElapsed);
+                displayTime = remaining > 0 ? -remaining : Math.abs(remaining);
+                cssClass = remaining > 0 ? 'going' : 'returning';
+            } else if (phase === 'espera') {
+                displayTime = esperaTime + currentElapsed;
+                cssClass = 'going';
+            } else if (phase === 'vuelta') {
+                // Cuenta regresiva desde 10 minutos (600s) menos lo acumulado
+                const remaining = 600 - (vueltaTime + currentElapsed);
+                displayTime = remaining > 0 ? -remaining : Math.abs(remaining);
+                cssClass = remaining > 0 ? 'going' : 'returning';
+            }
+
+            timeDisplay.textContent = formatTime(displayTime);
+            timeDisplay.className = 'time-display ' + cssClass;
+
+            // Actualizar indicador de fase
+            phaseIndicator.textContent = phase === 'ida' ? '🟢 IDA' :
+                phase === 'espera' ? '🟡 ESPERA' :
+                phase === 'vuelta' ? '🔴 VUELTA' : '⏳ Esperando inicio';
+            phaseIndicator.className = 'phase-indicator ' + (
+                phase === 'ida' ? 'phase-ida' :
+                phase === 'espera' ? 'phase-espera' :
+                phase === 'vuelta' ? 'phase-vuelta' : 'phase-ida'
+            );
+
+            // Tiempo total
+            const total = idaTime + currentElapsed + esperaTime + vueltaTime;
+            const totalFormatted = formatTime(total);
+            totalTimeDisplay.innerHTML = `Tiempo total: <strong>${totalFormatted}</strong>`;
+        }
+
+        // ===== INICIAR IDA =====
+        function iniciarIda() {
+            if (!ramal || !linea) {
+                alert('⚠️ Por favor, defina el ramal y la línea antes de iniciar.');
+                return;
+            }
+            // Reiniciar todo
+            detenerTimer();
+            idaTime = 0;
+            esperaTime = 0;
+            vueltaTime = 0;
+            currentElapsed = 0;
+            phase = 'ida';
+            currentSegmentStart = Date.now();
+            btnIniciarIda.disabled = true;
+            btnFinalizarIda.disabled = false;
+            timerInterval = setInterval(updateDisplay, 200);
+            updateDisplay();
+        }
+
+        // ===== FINALIZAR IDA =====
+        function finalizarIda() {
+            if (phase !== 'ida') return;
+            // Guardar tiempo acumulado de ida
+            idaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+            currentElapsed = 0;
+
+            // Iniciar espera automáticamente
+            phase = 'espera';
+            currentSegmentStart = Date.now();
+            btnFinalizarIda.disabled = true;
+
+            // Obtener tiempo de descanso del formulario
+            const recesoMin = parseInt(document.getElementById('receso').value) || 15;
+            const recesoSeg = recesoMin * 60;
+
+            updateDisplay();
+
+            // Al terminar la espera, arrancar vuelta automáticamente
+            setTimeout(() => {
+                if (phase === 'espera') {
+                    esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+                    currentElapsed = 0;
+                    phase = 'vuelta';
+                    currentSegmentStart = Date.now();
+                    updateDisplay();
+                    // La vuelta se detiene manualmente o cuando se inicia otro ramal
+                    btnFinalizarIda.disabled = false;
+                    btnFinalizarIda.textContent = '⏹ Finalizar ramal - VUELTA';
+                    btnFinalizarIda.onclick = finalizarVuelta;
+                }
+            }, recesoSeg * 1000);
+
+            updateDisplay();
+        }
+
+        function finalizarVuelta() {
+            if (phase !== 'vuelta') return;
+            vueltaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+            currentElapsed = 0;
+            detenerTimer();
+            phase = 'idle';
+            btnIniciarIda.disabled = false;
+            btnFinalizarIda.disabled = true;
+            btnFinalizarIda.textContent = '⏹ Finalizar ramal - IDA';
+            btnFinalizarIda.onclick = finalizarIda;
+            updateDisplay();
+        }
+
+        function detenerTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            currentSegmentStart = null;
+            currentElapsed = 0;
+        }
+
+        // ===== BOTONES DE HORA ACTUAL =====
+        function setNow(inputId) {
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById(inputId).value = hh + ':' + mm;
+        }
+
+        // ===== COMPLETAR FORMULARIO =====
+        function completar() {
+            const name = document.getElementById('name').value.trim();
+            const interno = document.getElementById('int').value.trim();
+            const ingSrv = document.getElementById('ing-srv').value;
+            const sdaTermI = document.getElementById('sda-term-i').value;
+            const llgTermI = document.getElementById('llg-term-i').value;
+            const receso = document.getElementById('receso').value;
+            const sdaTermV = document.getElementById('sda-term-v').value;
+            const llgTermV = document.getElementById('llg-term-v').value;
+            const formato = document.getElementById('formatoSelect').value;
+
+            // Validar campos
+            if (!name || !interno || !ingSrv || !sdaTermI || !llgTermI || !receso || !sdaTermV || !llgTermV) {
+                alert('⚠️ Por favor, complete todos los campos antes de enviar.');
+                return;
+            }
+            if (!formato) {
+                alert('⚠️ Por favor, seleccione un formato.');
+                return;
+            }
+
+            // Construir formato
+            const plantilla = `
+*Planilla✍🏻*
+*Horario de entrada:* ${ingSrv}
+*Inicio...*
+
+*Hora de salida de la Terminal:* ${sdaTermI}
+*Hora de llegada al destino:* ${llgTermI}
+
+*Descanso: ${receso} minutos.*
+*Vuelta...*
+
+*Hora de salida de la Terminal:* ${sdaTermV}
+*Hora de llegada a la Terminal:* ${llgTermV}
+
+*Chófer:* ${name}
+*Interno:* ${interno}
+*Línea:* 12
+`.trim();
+
+            resultPanel.textContent = plantilla;
+            resultPanel.classList.add('active');
+            btnCopy.style.display = 'block';
+        }
+
+        // ===== COPIAR AL PORTAPAPELES =====
+        function copiarAlPortapapeles() {
+            const texto = resultPanel.textContent;
+            navigator.clipboard.writeText(texto).then(() => {
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }).catch(() => {
+                alert('❌ No se pudo copiar. Intente manualmente.');
+            });
+        }
+
+        // ===== INICIALIZACIÓN =====
+        updateDisplay();
+    </script>
+</body>
+</html>
