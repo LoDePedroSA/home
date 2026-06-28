@@ -1,0 +1,92 @@
+Ayudame a hacer un sistema de contador de tiempo + un autocompletador de formato.
+
+Cuando habra la app, se cargara algo asi:
+[el contador principal]
+[separador]
+[control del contador]
+[separador]
+[Formulario para completar el formato]
+
+Configuracion de: "[el contador principal]"
+    - Que arriba a la derecha (pero dentro del recuadro del contador) diga:
+    "
+    Ramal: [r]
+    Linea: [l]
+    "
+    - Sera un contador que dira asi:
+        - Cuando arranca, el texto que hay es asi: "- [minutos]:[segundos]" en color verde. Por ejemplo: "- 09:50".
+        - Cuando ya se termina el contador, es decir que el tiempo llega a: "+ 00:00", se empieza a contar para arriba asi: "- [minutos]:[segundos]" en color rojo.
+    - Y abajo, habra un textito que dira: "Tiempo total: [[tiempo ida] + [espera] + [tiempo vuelta] = [tiempo final]]
+
+Configuracion de: "[separador]":
+    - Una linea no muy exajerada para separar contenidos.
+
+Configuracion de: "[control del contador]":
+Habran los siguientes botones:
+    - "Definir ramal" (se abre un recuadro donde el chofer pone el ramal (el lo escribe) y despues lo que escribio se guarda como [r] y se pone arriba a la derecha del contador (pero dentro del recuadro del contador))
+    - "Definir linea" (se abre un recuadro donde el chofer pone la linea (el lo escribe) y despues lo que escribio se guarda como [l] y se pone arriba a la derecha del contador (pero dentro del recuadro del contador))
+    - "Iniciar ramal - S: IDA" (arranca el contador)
+    - "Finalizar ramal - S: IDA" (deja de contar el tiempo de la ida y arranca la espera automaticamente, y despues arranca autoamticamente la VUELTA al esperar los minutos de descanso.) 
+
+
+
+Configuracion de: "[Formulario para completar el formato]":
+Texto: "Ingrese su Nombre y Apellido:"
+INPUT: {id="name"}
+Texto: "Ingrese su numero de interno:"
+INPUT: {id="int"}
+Texto: "Horario de Ingreso de Servicio:"
+INPUT: {id="ing-srv" y boton de hora actual}
+Texto: "Horario de Salida de la 1er Cabezera:"
+INPUT: {id="sda-term-i" y boton de hora actual}
+Texto: "Horario de Llegada a la 2da Cabezera:"
+INPUT: {id="llg-term-i" y boton de hora actual}
+Texto: "Tiempo de descanso:"
+INPUT: {id="receso"}
+Texto: "Horario de Salida hacia la 1er Cabezera:"
+INPUT: {id="sda-term-v" y boton de hora actual}
+Texto: "Horario de Llegada a la 1er Cabezera:"
+INPUT: {id="llg-term-v" y boton de hora actual}
+
+Texto: "Seleccione el formato a completar:"
+Select: {
+    - "Seleccione un formato" {no se puede seleccionar}
+    - "Empresa Linea 12"
+    - "Transportes Unidos de Merlo S.A."
+}
+
+Boton: {texto: "Enviar" - Ejecuta: "completar()"}
+
+Configuracion de la funcion: "completar()":
+1. Verifica que todos los campos esten completados.
+2.1. Busca cual formato hay que completar.
+2.2. Si el formato a completar es el de: "Empresa Linea 12", el formato a completar es este: 
+"
+*Planilla✍🏻*
+*Horario de entrada:* [ing-srv]
+*Inicio...*
+
+*Hora de salida de la Terminal:* [sda-term-i]
+*Hora de llegada al destino:* [llg-term-i]
+
+*Descanso: [receso] minutos.*
+*Vuelta...*
+
+*Hora de salida de la Terminal:* [sda-term-v]
+*Hora de llegada a la Terminal:*[llg-term-v]
+
+*Chófer:* [name]
+*Interno:* [int]
+*Línea:* 12
+"
+2.3. Si el formato a completar es el de: "Transportes Unidos de Merlo S.A.", el formato a completar es este:
+(es el mismo por ahora).
+3. Una vez completado exitosamente, se cargara una pestaña que tendra esto:
+Boton: {Texto: "Copiar" - Fucnion: se copia en el portapapeles del usuario el formato completado + le sale un cartelito al usuario que se lo copio en el portapapeles.}
+
+Recorda:
+    - El cronometro vuelve a "+ 00:00" cuando:
+        - Se cambia de sentido IDA > VUELTA.
+        - Se termina un ramal.
+        - Se arranca un ramal.
+    - Hacele estilos lindos :)
