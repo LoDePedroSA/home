@@ -8,6 +8,7 @@ const modelsCatalog = [
     { title: "Acortador de URLS", desc: "Acortador potenciado por Google y GitHub.", link: "https://lodepedrosa.github.io/Acortador_de_URLS/" },
     { title: "Eliminador de Archivos Temporales", desc: "Limpia tu PC de archivos temporales innecesarios.", link: "./Models/Eliminador_de_Archivos_Temporales.zip" },
     { title: "Programar Apagado Automatico", desc: "Programa el apagado de tu PC con opciones personalizadas.", link: "./Models/Programar_apagado_automatico.zip" },
+    { title: "CronoRuta", desc: "Aplicación web para conductores de transporte que integra un cronómetro inteligente de ramales con autocompletado de planillas. Controla los tiempos de ida, espera y vuelta con indicadores visuales, y genera reportes formateados listos para compartir. Ideal para líneas de colectivos y empresas de transporte que necesitan registrar horarios de servicio de manera rápida y profesional.", link: "./Models/CronoRuta.html"}
 ];
 
 function buildMarketplaceGrid() {
