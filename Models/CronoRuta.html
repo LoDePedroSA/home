@@ -63,9 +63,59 @@
             opacity: 0.6;
         }
 
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-time {
+            font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .navbar-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            background: var(--surface-light);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .navbar-btn:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+            transform: scale(1.05);
+        }
+
+        .navbar-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
         .counter-header {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             gap: 16px;
             margin-bottom: 12px;
             font-size: 0.8rem;
@@ -285,6 +335,11 @@
             color: #64748b;
         }
 
+        input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         select option {
             background: var(--surface);
             color: var(--text);
@@ -323,13 +378,21 @@
             border-radius: var(--radius);
             padding: 24px;
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: var(--shadow);
         }
 
         .modal h3 {
             margin-bottom: 16px;
             font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .modal p {
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
         .modal .btn-group {
@@ -386,13 +449,34 @@
                 font-size: 0.75rem;
                 padding: 8px 10px;
             }
+            .navbar-time {
+                font-size: 0.9rem;
+            }
+            .navbar-btn {
+                width: 36px;
+                height: 36px;
+            }
+            .navbar-btn svg {
+                width: 18px;
+                height: 18px;
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- CONTADOR PRINCIPAL -->
+        <div class="navbar">
+            <div style="width:42px;"></div>
+            <div class="navbar-time" id="clockDisplay">--:--</div>
+            <button class="navbar-btn" onclick="abrirModalPreferencias()" aria-label="Preferencias">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </button>
+        </div>
+
         <div class="card" id="counterCard">
             <div class="counter-header">
                 <span>🚏 Ramal: <strong id="ramalDisplay">—</strong></span>
@@ -411,10 +495,8 @@
             </div>
         </div>
 
-        <!-- SEPARADOR -->
         <div class="separator"></div>
 
-        <!-- CONTROL DEL CONTADOR -->
         <div class="card">
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="abrirModal('ramal')">📝 Definir ramal</button>
@@ -427,10 +509,8 @@
             </div>
         </div>
 
-        <!-- SEPARADOR -->
         <div class="separator"></div>
 
-        <!-- FORMULARIO -->
         <div class="card">
             <h3 style="margin-bottom:16px; font-size:1rem; color:var(--accent);">📋 Formulario para completar el formato</h3>
 
@@ -500,13 +580,11 @@
 
             <button class="btn btn-primary" style="width:100%;" onclick="completar()">📨 Enviar</button>
 
-            <!-- RESULTADO -->
             <div class="result-panel" id="resultPanel"></div>
             <button class="btn btn-copy" id="btnCopy" style="display:none;" onclick="copiarAlPortapapeles()">📋 Copiar al portapapeles</button>
         </div>
     </div>
 
-    <!-- MODAL -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <h3 id="modalTitle">Definir</h3>
@@ -518,24 +596,32 @@
         </div>
     </div>
 
-    <!-- TOAST -->
+    <div class="modal-overlay" id="preferenciasOverlay">
+        <div class="modal">
+            <h3>Preferencias de Datos</h3>
+            <p>¿Quiere completar la planilla con los datos del Contador de Servicio o los rellenas a mano?</p>
+            <div class="btn-group">
+                <button class="btn btn-success" onclick="saveData('contador-si')">✅ Sí, quiero usar los datos del Contador de Servicio</button>
+                <button class="btn btn-danger" onclick="saveData('contador-no')">❌ No, prefiero rellenar los datos a mano</button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast">✅ Copiado al portapapeles</div>
 
     <script>
-        // ===== VARIABLES GLOBALES =====
         let ramal = '';
         let linea = '';
-        let totalRouteSeconds = 600; // 10 minutos por defecto
-        let phase = 'idle'; // 'idle' | 'ida' | 'espera' | 'vuelta'
+        let totalRouteSeconds = 600;
+        let phase = 'idle';
         let idaTime = 0;
         let esperaTime = 0;
         let vueltaTime = 0;
         let currentSegmentStart = null;
         let timerInterval = null;
         let currentElapsed = 0;
-        let esperaDuration = 0; // duración dinámica de la espera (se actualiza según formato)
+        let esperaDuration = 0;
 
-        // ===== ELEMENTOS DOM =====
         const timeDisplay = document.getElementById('timeDisplay');
         const phaseIndicator = document.getElementById('phaseIndicator');
         const totalTimeDisplay = document.getElementById('totalTimeDisplay');
@@ -547,8 +633,48 @@
         const resultPanel = document.getElementById('resultPanel');
         const btnCopy = document.getElementById('btnCopy');
         const toast = document.getElementById('toast');
+        const clockDisplay = document.getElementById('clockDisplay');
 
-        // ===== MODAL =====
+        function saveData(value) {
+            try {
+                localStorage.setItem('valores', value);
+                cerrarPreferencias();
+                aplicarPreferencias();
+                mostrarToast('✅ Preferencia guardada correctamente');
+            } catch (error) {
+                console.error('Error al guardar en localStorage:', error);
+            }
+        }
+
+        function aplicarPreferencias() {
+            const valor = localStorage.getItem('valores');
+            const campos = ['ing-srv', 'sda-term-i', 'llg-term-i', 'receso', 'sda-term-v', 'llg-term-v'];
+            campos.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.disabled = (valor === 'contador-si');
+                }
+            });
+        }
+
+        function abrirModalPreferencias() {
+            document.getElementById('preferenciasOverlay').classList.add('active');
+        }
+
+        function cerrarPreferencias() {
+            document.getElementById('preferenciasOverlay').classList.remove('active');
+        }
+
+        document.getElementById('preferenciasOverlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) cerrarPreferencias();
+        });
+
+        function mostrarToast(mensaje) {
+            toast.textContent = mensaje;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
         let modalMode = '';
 
         function abrirModal(mode) {
@@ -607,7 +733,6 @@
             if (e.target === e.currentTarget) cerrarModal();
         });
 
-        // ===== ACTUALIZAR DISPLAY =====
         function formatTime(totalSeconds) {
             const isNegative = totalSeconds < 0;
             const abs = Math.abs(totalSeconds);
@@ -639,22 +764,20 @@
                 displayTime = remaining > 0 ? -remaining : Math.abs(remaining);
             }
 
-            // Determinar color según el porcentaje restante
             if (phase === 'ida' || phase === 'vuelta') {
                 const ratio = remaining / totalRouteSeconds;
                 if (remaining > 0 && ratio > 0.55) {
-                    cssClass = 'going'; // verde
+                    cssClass = 'going';
                 } else if (remaining > 0 && ratio >= 0.45) {
-                    cssClass = 'warning'; // amarillo (cerca de la mitad)
+                    cssClass = 'warning';
                 } else {
-                    cssClass = 'returning'; // rojo (menos de la mitad o tiempo cumplido)
+                    cssClass = 'returning';
                 }
             }
 
             timeDisplay.textContent = formatTime(displayTime);
             timeDisplay.className = 'time-display ' + cssClass;
 
-            // Indicador de fase
             phaseIndicator.textContent = phase === 'ida' ? '🟢 IDA' :
                 phase === 'espera' ? '🟡 ESPERA' :
                 phase === 'vuelta' ? '🔴 VUELTA' : '⏳ Esperando inicio';
@@ -664,12 +787,10 @@
                 phase === 'vuelta' ? 'phase-vuelta' : 'phase-ida'
             );
 
-            // Tiempo total acumulado
             const total = idaTime + currentElapsed + esperaTime + vueltaTime;
             totalTimeDisplay.innerHTML = `Tiempo total: <strong>${formatTime(total)}</strong>`;
         }
 
-        // ===== INICIAR IDA =====
         function iniciarIda() {
             if (!ramal || !linea) {
                 alert('⚠️ Por favor, defina el ramal y la línea antes de iniciar.');
@@ -690,34 +811,26 @@
             updateDisplay();
         }
 
-        // ===== FINALIZAR IDA =====
         function finalizarIda() {
             if (phase !== 'ida') return;
 
-            // Guardar tiempo de ida
             idaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
             currentElapsed = 0;
 
-            // Determinar duración de la espera
             const formato = document.getElementById('formatoSelect').value;
             if (formato === 'merlo') {
-                // Transportes Unidos de Merlo: espera = (ida * 2) - total recorrido
                 const esperaCalculada = Math.max(0, 2 * idaTime - totalRouteSeconds);
                 esperaDuration = esperaCalculada;
-                // Reflejar en el campo de formulario
                 document.getElementById('receso').value = Math.round(esperaCalculada / 60);
             } else {
-                // Usar el valor manual del formulario
                 esperaDuration = (parseInt(document.getElementById('receso').value) || 15) * 60;
             }
 
-            // Iniciar espera
             phase = 'espera';
             currentSegmentStart = Date.now();
             btnFinalizarIda.disabled = true;
             updateDisplay();
 
-            // Programar inicio de vuelta
             setTimeout(() => {
                 if (phase === 'espera') {
                     esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
@@ -754,7 +867,6 @@
             currentElapsed = 0;
         }
 
-        // ===== BOTONES DE HORA =====
         function setNow(inputId) {
             const now = new Date();
             const hh = String(now.getHours()).padStart(2, '0');
@@ -762,7 +874,13 @@
             document.getElementById(inputId).value = hh + ':' + mm;
         }
 
-        // ===== COMPLETAR FORMULARIO =====
+        function actualizarReloj() {
+            const ahora = new Date();
+            const hh = String(ahora.getHours()).padStart(2, '0');
+            const mm = String(ahora.getMinutes()).padStart(2, '0');
+            clockDisplay.textContent = hh + ':' + mm;
+        }
+
         function completar() {
             const name = document.getElementById('name').value.trim();
             const interno = document.getElementById('int').value.trim();
@@ -784,14 +902,45 @@
             }
 
             let recesoValor = recesoInput.value;
-            // Si es Transportes Unidos de Merlo, calcular automáticamente
             if (formato === 'merlo' && idaTime > 0) {
                 const esperaAuto = Math.max(0, 2 * idaTime - totalRouteSeconds);
                 recesoValor = Math.round(esperaAuto / 60);
-                recesoInput.value = recesoValor; // actualizar campo
+                recesoInput.value = recesoValor;
             }
 
-            const plantilla = `
+            let plantilla = '';
+
+            if (formato === 'merlo') {
+                const hoy = new Date();
+                const fechaStr = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
+                plantilla = `
+*PLANILLA TRANSPORTES UNIDOS DE MERLO S.A*
+
+*CHOFER*: ${name}
+*LEJAGO*: 2001 
+*INTERNO*: ${interno}
+*RAMAL*: ${ramal || '—'}
+*LINEA*: ${linea || '—'}
+*FECHA*: ${fechaStr}
+
+*RECORRIDO*
+
+*IDA*
+
+*HORARIO SALIDA*: ${sdaTermI}
+*HORARIO LLEGADA*: ${llgTermI}
+
+*ESPERA*: ${recesoValor}
+
+*VUELTA*
+
+*HORARIO DE SALIDA*: ${sdaTermV}
+*HORARIO DE LLEGADA*: ${llgTermV}
+
+*SATISFACCIÓN DE PASAJEROS/%*:
+`.trim();
+            } else {
+                plantilla = `
 *Planilla✍🏻*
 *Horario de entrada:* ${ingSrv}
 *Inicio...*
@@ -807,8 +956,9 @@
 
 *Chófer:* ${name}
 *Interno:* ${interno}
-*Línea:* 12
+*Línea:* ${linea || '—'}-${ramal || '—'}
 `.trim();
+            }
 
             resultPanel.textContent = plantilla;
             resultPanel.classList.add('active');
@@ -818,14 +968,21 @@
         function copiarAlPortapapeles() {
             const texto = resultPanel.textContent;
             navigator.clipboard.writeText(texto).then(() => {
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
+                mostrarToast('✅ Copiado al portapapeles');
             }).catch(() => {
                 alert('❌ No se pudo copiar. Intente manualmente.');
             });
         }
 
-        // Inicialización
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+
+        if (!localStorage.getItem('valores')) {
+            document.getElementById('preferenciasOverlay').classList.add('active');
+        } else {
+            aplicarPreferencias();
+        }
+
         updateDisplay();
     </script>
 </body>

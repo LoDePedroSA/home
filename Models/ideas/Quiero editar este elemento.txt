@@ -1,0 +1,73 @@
+Quiero editar este elemento:
+1- Que cuando el usuario entre por primera vez, que le salga este recuadro: {
+    Texto: "¿Quiere completar la planilla con los datos del Contador de Servicio o los rellenas a mano?"
+    Boton: {Color: Verde claro - Texto: "Sí, quiero usar los datos del Contador de Servicio" - Ejecuta: saveData('contador-si')}
+    Boton: {Color: Rojo - Texto: "No, prefiero rellenar los datos a mano" - Ejecuta: saveData('contador-no')}
+}
+
+2- Si no existe el documento: "LocalStorage > valores", se abrira el recuadro del punto de arriba (el "1-").
+Si en: "LocalStorage > valores > " = "contador-si", los valores que pueden ser respondidos por el contador, se bloquearan, es decir, que el usuario no les podra modificar el valor.
+Si en: "LocalStorage > valores > " = "contador-no", los valores que pueden ser respondidos por el contador, se desbloquearan, es decir, que el usuario podra modificar el valor.
+
+3- Crea una nueva funcion que se llame "saveData", y esta funcione asi: {
+    1. Que se cree un nuevo documento en el LocalStorage y que se llame: "valores".
+    2. Que este nuevo documento, tenga de contenido lo que se puso entre el "('')" al usar la funcion.
+    3. Ahi terminaria, pero si hay algun error que se recurra a la consola.
+}
+
+4- El formato oficial de la opcion "Transportes Unidos de Merlo S.A." va a ser:
+"
+*PLANILLA TRANSPORTES UNIDOS DE MERLO S.A*
+
+*CHOFER*: [name]
+*LEJAGO*: 2001 
+*INTERNO*: [int]
+*RAMAL*: [ramal que puso en el Contador]
+*LINEA*: [linea que puso en el Contador]
+*FECHA*: [dia en el que se empezo el ramal]
+
+*RECORRIDO*
+
+*IDA*
+
+*HORARIO SALIDA*: [sda-term-i]
+*HORARIO LLEGADA*: [llg-term-i]
+
+*ESPERA*: [receso]
+
+*VUELTA*
+
+*HORARIO DE SALIDA*: [sda-term-v]
+*HORARIO DE LLEGADA*: [llg-term-v]
+
+*SATISFACCIÓN DE PASAJEROS/%*:
+"
+
+5- Hare unos cambios en el formato de "Emp. Linea 12" y sera este el nuevo:
+"
+*Planilla✍🏻*
+*Horario de entrada:* [ing-srv]
+*Inicio...*
+
+*Hora de salida de la Terminal:* [sda-term-i]
+*Hora de llegada al destino:* [llg-term-i]
+
+*Descanso: [receso] minutos.*
+*Vuelta...*
+
+*Hora de salida de la Terminal:* [sda-term-v]
+*Hora de llegada a la Terminal:*[llg-term-v]
+
+*Chófer:* [name]
+*Interno:* [int]
+*Línea:* [linea que puso en el Contador]-[ramal que puso en el Contador] (ej: 12-X Avellaneda)
+"
+
+6- Crea una barra de navegacion. En esta barra pondremos: {
+    - En el centro, la hora en formato 24hs y hh/mm. Es deicr, que se agrrara la hora de la localidad del usuario y se pondra alli en el formato 24hs y: hh/mm.
+    - A la derecha, pondremos un boton circular el cual, no tendra texto, sino que tendra la imagen: "../Assets/ajuste.png", si el usuario hace click, se abrira el recuadro del primer punto, es decir del: "1-"
+}
+
+7- Move los textos: "Ramal: " y "Linea: " a la izquierda, es decir, en el mismo recuadro donde estan pero a la izquierda en vez de la derecha.
+
+8- Elimina los comentarios.

@@ -1,0 +1,18 @@
+Modifiquemos este .bat:
+1- Saca los comentarios.
+2- Que al usuario se le permita cargar un enlace o mas.
+3- Que al usuario se le permita elegir una ubicacion de descarga perzonalizada (opcion 4).
+4- Que al iniciar el programa se haga esto: {
+    1. Cree un archivo llamado: "logs.txt" si es que no existia.
+    2.1. Si no existia,. una vez creado, que en la primera linea se ponga: "language: Español Latinoamerica - ES-LM.
+    2.2. Si tiene contenido (porque ya habia sido crado antes) lo que se hara es poner un espacio en blanco (enter).
+    3. Se pondra esto: "---------------------------------------------"
+    4. Se empezaran a poner las acciones: {
+        - Inicio de descarga: dd/mm/yyyy - hh/mm/ss - Inicio de descarga de archivo/s: [archivo/s descargandose]
+        - Fin de descarga: dd/mm/yyyy - hh/mm/ss - Fin de la descarga de archivo/s: [archivo/s descargados]
+        - Error en algun otro motivo: dd/mm/yyyy - hh/mm/ss - Error: [tipo de error]
+    }
+}
+5- Ahora hagamos esto: si el archivo a descargar utilza demas archivos, ponele, que si descargas un HTML y ese HTML utiliza un js externo, que el js se descargue y asi con todo.
+6- Ahora hagamos esto: si se pone una URL sin rterminacion de archivo, ej: "https://lodepedrosa.github.io/home/", se descargara toda la carpeta "home".
+7- Que el sistema eliga si es mejor utilizar "aria2c.exe" o usar "wget.exe".

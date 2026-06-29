@@ -1,0 +1,37 @@
+Actalizar y agregar ideas:
+- Crea un estilo mejorado, con animaciones, sobras, degradado en los botones, etc.
+- El usuario tendra un inventario. AL comprar un objeto, se le descontara el dinero y luego el objeto que compro se agregara al inventario. Con un boton podra acceder al inventario, ahi podra elejir cuantas unidades y a que precio quiere venderlas. El precio de venta no puede ser mayor a 50% de ganancia. El precio dependiendo de cuanto sea la oferta, mas tiempo tardara en encontrar un comprador. Ejemplo: Compro un telefono a $400 y lo va a vender a $450. Hay $50 de ganacia entonces taradara 25 segundos en venderser. Ganancia :(dividido) 2 = Tiempo de espera en segundos.
+_______________
+- Agrega un nuevo boton: {
+    - Nombre: "💾 Guardar progreso".
+    - Funcion: Creara un archivo llamado: "(hora)-(minuto)-(segundo)-(dia)-(mes)-(año).js". El contenido de ese archivo sera: {Dinero actual del usuario, nivel actual del usuario, experiencia, contenido de su inventario.} Esto serviria para que en otro momento del dia al ejecutar el archivo se cargue todo el progreso del usuario.
+}
+- Agrega un nuevo boton: {
+    - Nombre: "📥 Cargar progreso"
+    - Fncion: Seleccionando el archivo .js, podra cargar todo el progreso anterior.
+}
+_______________
+- Ganancia / 15 = Tiempo en segundos.
+- Al vender un objeto, no marcar cuanto va a tener que esperar el usuario.
+- Crea un fragmento de style.css para...{
+    - En recuadro pequeño donde el usuario tiene que introducir la cantidad que desea vender.
+    - En recuadro pequeño donde el usuario tiene que introducir el precio.
+}
+_______________
+- Luego de vender que el menu del inventario no se tiene que cerrar. Se cerrara cuando el usuario use el boton.
+- Dependiendo el nivel del objeto, el precio de venta puede variar: {
+    Objeto nivel 0: Precio menor a $150 de ganancia. 
+    Objeto nivel 1: Precio menor a $300 de ganancia. 
+    Objeto nivel 2: Precio menor a $450 de ganancia. 
+    Objeto nivel 3: Precio menor a $600 de ganancia. 
+    Objeto nivel 4: Precio menor a $750 de ganancia. 
+    Objeto nivel 5: Precio menor a $900 de ganancia. 
+    Objeto nivel 6: Precio menor a $1050 de ganancia. 
+}
+- Editar el sistema de progreso: {
+    - Boton: "📥 Cargar progreso"
+    - Boton: "💾 Guardar progreso"{
+        Al accionar este boton, preguntara el nombre del usuario. Luego en el .js en la segunda linea, aparecera: "name: (el nombre introducido)". 
+        Esto se hace para que al cargar los datos. Salga: "Bienvenido/a (nombre), tus datos fueron cargados exitosamente...".
+    }
+}
