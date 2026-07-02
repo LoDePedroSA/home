@@ -520,6 +520,11 @@
             </div>
 
             <div class="form-group">
+                <label>Ingrese su legajo:</label>
+                <input type="text" id="legajo" placeholder="Ej: 2001">
+            </div>
+
+            <div class="form-group">
                 <label>Ingrese su número de interno:</label>
                 <input type="text" id="int" placeholder="Ej: 4521">
             </div>
@@ -883,6 +888,7 @@
 
         function completar() {
             const name = document.getElementById('name').value.trim();
+            const legajo = document.getElementById('legajo').value.trim();
             const interno = document.getElementById('int').value.trim();
             const ingSrv = document.getElementById('ing-srv').value;
             const sdaTermI = document.getElementById('sda-term-i').value;
@@ -917,7 +923,7 @@
 *PLANILLA TRANSPORTES UNIDOS DE MERLO S.A*
 
 *CHOFER*: ${name}
-*LEJAGO*: 2001 
+*LEGAJO*: ${legajo || '—'}
 *INTERNO*: ${interno}
 *RAMAL*: ${ramal || '—'}
 *LINEA*: ${linea || '—'}
