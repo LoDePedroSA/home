@@ -612,6 +612,18 @@
         </div>
     </div>
 
+    <!-- Modal para preguntar espera -->
+    <div class="modal-overlay" id="esperaModal">
+        <div class="modal">
+            <h3>⏳ Tiempo de espera</h3>
+            <p>¿Cuántos minutos de espera va a realizar?</p>
+            <input type="number" id="esperaInput" placeholder="Ej: 15" min="0" value="15">
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="confirmarEspera()">Confirmar espera</button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast">✅ Copiado al portapapeles</div>
 
     <script>
@@ -626,6 +638,7 @@
         let timerInterval = null;
         let currentElapsed = 0;
         let esperaDuration = 0;
+        let esperaConfirmada = false;
 
         const timeDisplay = document.getElementById('timeDisplay');
         const phaseIndicator = document.getElementById('phaseIndicator');
@@ -839,11 +852,12 @@
             const mm = String(now.getMinutes()).padStart(2, '0');
             const timeStr = hh + ':' + mm;
             
-            // Solo auto-completar si estamos en la fase correspondiente y el campo está vacío
+            // Auto-completar ingreso de servicio al iniciar IDA
             if (phase === 'ida' && !ingSrvInput.value) {
                 ingSrvInput.value = timeStr;
             }
             
+            // Auto-completar salida de IDA (1er cabecera) al inicio de IDA
             if (phase === 'ida' && currentElapsed > 0 && !sdaTermIInput.value) {
                 const startTime = new Date(Date.now() - (idaTime + currentElapsed) * 1000);
                 const shh = String(startTime.getHours()).padStart(2, '0');
@@ -851,15 +865,18 @@
                 sdaTermIInput.value = shh + ':' + smm;
             }
             
+            // Auto-completar llegada de IDA (2da cabecera) cuando se completa el tiempo de IDA
             if (phase === 'ida' && idaTime + currentElapsed >= totalRouteSeconds && !llgTermIInput.value) {
                 llgTermIInput.value = timeStr;
             }
             
-            if (phase === 'espera' && !recesoInput.value) {
-                const esperaMin = Math.floor((esperaTime + currentElapsed) / 60);
+            // Auto-completar espera
+            if (phase === 'espera' && !recesoInput.value && esperaConfirmada) {
+                const esperaMin = Math.floor(esperaDuration / 60);
                 recesoInput.value = esperaMin || 15;
             }
             
+            // Auto-completar salida de VUELTA (1er cabecera) al inicio de VUELTA
             if (phase === 'vuelta' && currentElapsed > 0 && !sdaTermVInput.value) {
                 const startTime = new Date(Date.now() - (vueltaTime + currentElapsed) * 1000);
                 const shh = String(startTime.getHours()).padStart(2, '0');
@@ -867,6 +884,7 @@
                 sdaTermVInput.value = shh + ':' + smm;
             }
             
+            // Auto-completar llegada de VUELTA (1er cabecera) cuando se completa el tiempo de VUELTA
             if (phase === 'vuelta' && vueltaTime + currentElapsed >= totalRouteSeconds && !llgTermVInput.value) {
                 llgTermVInput.value = timeStr;
             }
@@ -884,8 +902,9 @@
             esperaTime = 0;
             vueltaTime = 0;
             currentElapsed = 0;
+            esperaConfirmada = false;
             
-            // Limpiar campos de tiempo previos
+            // Limpiar campos de tiempo previos si está en modo automático
             if (localStorage.getItem('valores') === 'contador-si') {
                 ingSrvInput.value = '';
                 sdaTermIInput.value = '';
@@ -912,29 +931,83 @@
             updateDisplay();
         }
 
+        function mostrarModalEspera() {
+            document.getElementById('esperaModal').classList.add('active');
+            document.getElementById('esperaInput').focus();
+        }
+
+        function confirmarEspera() {
+            const input = document.getElementById('esperaInput');
+            const minutos = parseFloat(input.value);
+            if (isNaN(minutos) || minutos < 0) {
+                alert('⚠️ Por favor, ingrese un número válido de minutos.');
+                return;
+            }
+            
+            esperaDuration = minutos * 60;
+            esperaConfirmada = true;
+            
+            // Actualizar campo de receso
+            if (localStorage.getItem('valores') === 'contador-si') {
+                recesoInput.value = minutos;
+            }
+            
+            document.getElementById('esperaModal').classList.remove('active');
+            
+            // Continuar con la finalización de IDA
+            continuarFinalizarIda();
+        }
+
+        function finalizarIda() {
+            if (phase !== 'ida') return;
+            
+            // Mostrar modal para preguntar espera
+            mostrarModalEspera();
+        }
+
+        function continuarFinalizarIda() {
+            idaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+            currentElapsed = 0;
+
+            phase = 'espera';
+            currentSegmentStart = Date.now();
+            
+            btnFinalizarIda.disabled = true;
+            btnFinalizarIda.textContent = '⏳ En espera...';
+            
+            // Habilitar botón de iniciar vuelta
+            btnIniciarIda.disabled = false;
+            btnIniciarIda.textContent = '▶ Iniciar Ramal - VUELTA';
+            btnIniciarIda.onclick = iniciarVuelta;
+            btnIniciarIda.className = 'btn btn-warning';
+            btnIniciarIda.style.backgroundColor = '#f59e0b';
+            
+            updateDisplay();
+            
+            // Auto-iniciar vuelta después del tiempo de espera
+            setTimeout(() => {
+                if (phase === 'espera') {
+                    esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+                    currentElapsed = 0;
+                    phase = 'vuelta';
+                    currentSegmentStart = Date.now();
+                    updateDisplay();
+                    
+                    btnIniciarIda.disabled = true;
+                    btnIniciarIda.textContent = '⏳ En curso...';
+                    
+                    btnFinalizarIda.disabled = false;
+                    btnFinalizarIda.textContent = '⏹ Finalizar Ramal - VUELTA';
+                    btnFinalizarIda.onclick = finalizarVuelta;
+                }
+            }, esperaDuration * 1000);
+        }
+
         function iniciarVuelta() {
             if (phase !== 'espera') {
                 // Si estamos en IDA y se presiona el botón de vuelta, forzamos finalizar IDA primero
                 if (phase === 'ida') {
                     finalizarIda();
-                    // Después de finalizar IDA, esperamos un momento y luego iniciamos vuelta
-                    setTimeout(() => {
-                        if (phase === 'espera') {
-                            // Forzar el inicio de la vuelta después de la espera
-                            esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
-                            currentElapsed = 0;
-                            phase = 'vuelta';
-                            currentSegmentStart = Date.now();
-                            updateDisplay();
-                            
-                            btnIniciarIda.disabled = true;
-                            btnIniciarIda.textContent = '⏳ En curso...';
-                            
-                            btnFinalizarIda.disabled = false;
-                            btnFinalizarIda.textContent = '⏹ Finalizar Ramal - VUELTA';
-                            btnFinalizarIda.onclick = finalizarVuelta;
-                        }
-                    }, 500);
                     return;
                 }
                 return;
@@ -955,46 +1028,20 @@
             btnFinalizarIda.onclick = finalizarVuelta;
         }
 
-        function finalizarIda() {
-            if (phase !== 'ida') return;
-
-            idaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
-            currentElapsed = 0;
-
-            // Calcular espera
-            const formato = document.getElementById('formatoSelect').value;
-            if (formato === 'merlo') {
-                const esperaCalculada = Math.max(0, 2 * idaTime - totalRouteSeconds);
-                esperaDuration = esperaCalculada;
-                if (localStorage.getItem('valores') === 'contador-si') {
-                    recesoInput.value = Math.round(esperaCalculada / 60);
-                }
-            } else {
-                esperaDuration = (parseInt(document.getElementById('receso').value) || 15) * 60;
-            }
-
-            phase = 'espera';
-            currentSegmentStart = Date.now();
-            
-            btnFinalizarIda.disabled = true;
-            btnFinalizarIda.textContent = '⏳ En espera...';
-            
-            // Habilitar botón de iniciar vuelta
-            btnIniciarIda.disabled = false;
-            btnIniciarIda.textContent = '▶ Iniciar Ramal - VUELTA';
-            btnIniciarIda.onclick = iniciarVuelta;
-            btnIniciarIda.className = 'btn btn-warning';
-            btnIniciarIda.style.backgroundColor = '#f59e0b';
-            
-            updateDisplay();
-        }
-
         function finalizarVuelta() {
             if (phase !== 'vuelta') return;
             vueltaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
             currentElapsed = 0;
             detenerTimer();
             phase = 'idle';
+            
+            // Auto-completar el último campo (llegada de vuelta)
+            if (localStorage.getItem('valores') === 'contador-si') {
+                const now = new Date();
+                const hh = String(now.getHours()).padStart(2, '0');
+                const mm = String(now.getMinutes()).padStart(2, '0');
+                llgTermVInput.value = hh + ':' + mm;
+            }
             
             btnIniciarIda.disabled = false;
             btnIniciarIda.textContent = '▶ Iniciar Ramal - IDA';
@@ -1125,6 +1172,17 @@
                 alert('❌ No se pudo copiar. Intente manualmente.');
             });
         }
+
+        // Cerrar modal de espera con Escape
+        document.getElementById('esperaModal').addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('esperaModal').classList.remove('active');
+            }
+        });
+
+        document.getElementById('esperaInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') confirmarEspera();
+        });
 
         // Inicialización
         setInterval(actualizarReloj, 1000);
