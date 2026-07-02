@@ -504,8 +504,8 @@
                 <button class="btn btn-outline" onclick="abrirModal('tiempo')">⏱️ Definir tiempo recorrido</button>
             </div>
             <div class="btn-group" style="margin-top:10px;">
-                <button class="btn btn-success" id="btnIniciarIda" onclick="iniciarIda()">▶ Iniciar ramal - IDA</button>
-                <button class="btn btn-danger" id="btnFinalizarIda" onclick="finalizarIda()" disabled>⏹ Finalizar ramal - IDA</button>
+                <button class="btn btn-success" id="btnIniciarIda" onclick="iniciarIda()">▶ Iniciar Ramal - IDA</button>
+                <button class="btn btn-danger" id="btnFinalizarIda" onclick="finalizarIda()" disabled>⏹ Finalizar Ramal - IDA</button>
             </div>
         </div>
 
@@ -533,7 +533,7 @@
                 <label>Horario de Ingreso de Servicio:</label>
                 <div class="input-row">
                     <input type="time" id="ing-srv">
-                    <button class="btn btn-outline" onclick="setNow('ing-srv')">🕐 Ahora</button>
+                    <button class="btn btn-outline" onclick="setNow('ing-srv')" id="btn-ing-srv">🕐 Ahora</button>
                 </div>
             </div>
 
@@ -541,7 +541,7 @@
                 <label>Horario de Salida de la 1er Cabecera:</label>
                 <div class="input-row">
                     <input type="time" id="sda-term-i">
-                    <button class="btn btn-outline" onclick="setNow('sda-term-i')">🕐 Ahora</button>
+                    <button class="btn btn-outline" onclick="setNow('sda-term-i')" id="btn-sda-term-i">🕐 Ahora</button>
                 </div>
             </div>
 
@@ -549,7 +549,7 @@
                 <label>Horario de Llegada a la 2da Cabecera:</label>
                 <div class="input-row">
                     <input type="time" id="llg-term-i">
-                    <button class="btn btn-outline" onclick="setNow('llg-term-i')">🕐 Ahora</button>
+                    <button class="btn btn-outline" onclick="setNow('llg-term-i')" id="btn-llg-term-i">🕐 Ahora</button>
                 </div>
             </div>
 
@@ -562,7 +562,7 @@
                 <label>Horario de Salida hacia la 1er Cabecera:</label>
                 <div class="input-row">
                     <input type="time" id="sda-term-v">
-                    <button class="btn btn-outline" onclick="setNow('sda-term-v')">🕐 Ahora</button>
+                    <button class="btn btn-outline" onclick="setNow('sda-term-v')" id="btn-sda-term-v">🕐 Ahora</button>
                 </div>
             </div>
 
@@ -570,7 +570,7 @@
                 <label>Horario de Llegada a la 1er Cabecera:</label>
                 <div class="input-row">
                     <input type="time" id="llg-term-v">
-                    <button class="btn btn-outline" onclick="setNow('llg-term-v')">🕐 Ahora</button>
+                    <button class="btn btn-outline" onclick="setNow('llg-term-v')" id="btn-llg-term-v">🕐 Ahora</button>
                 </div>
             </div>
 
@@ -640,6 +640,21 @@
         const toast = document.getElementById('toast');
         const clockDisplay = document.getElementById('clockDisplay');
 
+        // Elementos de tiempo
+        const ingSrvInput = document.getElementById('ing-srv');
+        const sdaTermIInput = document.getElementById('sda-term-i');
+        const llgTermIInput = document.getElementById('llg-term-i');
+        const sdaTermVInput = document.getElementById('sda-term-v');
+        const llgTermVInput = document.getElementById('llg-term-v');
+        const recesoInput = document.getElementById('receso');
+
+        // Botones "Ahora"
+        const btnIngSrv = document.getElementById('btn-ing-srv');
+        const btnSdaTermI = document.getElementById('btn-sda-term-i');
+        const btnLlgTermI = document.getElementById('btn-llg-term-i');
+        const btnSdaTermV = document.getElementById('btn-sda-term-v');
+        const btnLlgTermV = document.getElementById('btn-llg-term-v');
+
         function saveData(value) {
             try {
                 localStorage.setItem('valores', value);
@@ -654,7 +669,16 @@
         function aplicarPreferencias() {
             const valor = localStorage.getItem('valores');
             const campos = ['ing-srv', 'sda-term-i', 'llg-term-i', 'receso', 'sda-term-v', 'llg-term-v'];
+            const botones = ['btn-ing-srv', 'btn-sda-term-i', 'btn-llg-term-i', 'btn-sda-term-v', 'btn-llg-term-v'];
+            
             campos.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.disabled = (valor === 'contador-si');
+                }
+            });
+            
+            botones.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
                     el.disabled = (valor === 'contador-si');
@@ -747,6 +771,13 @@
             return sign + String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
         }
 
+        function getTimeString(seconds) {
+            const totalSeconds = Math.floor(seconds);
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        }
+
         function updateDisplay() {
             if (currentSegmentStart && phase !== 'idle') {
                 currentElapsed = Math.floor((Date.now() - currentSegmentStart) / 1000);
@@ -794,6 +825,51 @@
 
             const total = idaTime + currentElapsed + esperaTime + vueltaTime;
             totalTimeDisplay.innerHTML = `Tiempo total: <strong>${formatTime(total)}</strong>`;
+            
+            // Auto-completar campos de tiempo
+            autoCompletarCampos();
+        }
+
+        function autoCompletarCampos() {
+            const valor = localStorage.getItem('valores');
+            if (valor !== 'contador-si') return;
+            
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const timeStr = hh + ':' + mm;
+            
+            // Solo auto-completar si estamos en la fase correspondiente y el campo está vacío
+            if (phase === 'ida' && !ingSrvInput.value) {
+                ingSrvInput.value = timeStr;
+            }
+            
+            if (phase === 'ida' && currentElapsed > 0 && !sdaTermIInput.value) {
+                const startTime = new Date(Date.now() - (idaTime + currentElapsed) * 1000);
+                const shh = String(startTime.getHours()).padStart(2, '0');
+                const smm = String(startTime.getMinutes()).padStart(2, '0');
+                sdaTermIInput.value = shh + ':' + smm;
+            }
+            
+            if (phase === 'ida' && idaTime + currentElapsed >= totalRouteSeconds && !llgTermIInput.value) {
+                llgTermIInput.value = timeStr;
+            }
+            
+            if (phase === 'espera' && !recesoInput.value) {
+                const esperaMin = Math.floor((esperaTime + currentElapsed) / 60);
+                recesoInput.value = esperaMin || 15;
+            }
+            
+            if (phase === 'vuelta' && currentElapsed > 0 && !sdaTermVInput.value) {
+                const startTime = new Date(Date.now() - (vueltaTime + currentElapsed) * 1000);
+                const shh = String(startTime.getHours()).padStart(2, '0');
+                const smm = String(startTime.getMinutes()).padStart(2, '0');
+                sdaTermVInput.value = shh + ':' + smm;
+            }
+            
+            if (phase === 'vuelta' && vueltaTime + currentElapsed >= totalRouteSeconds && !llgTermVInput.value) {
+                llgTermVInput.value = timeStr;
+            }
         }
 
         function iniciarIda() {
@@ -802,18 +878,81 @@
                 return;
             }
             detenerTimer();
+            
+            // Reiniciar todos los tiempos
             idaTime = 0;
             esperaTime = 0;
             vueltaTime = 0;
             currentElapsed = 0;
+            
+            // Limpiar campos de tiempo previos
+            if (localStorage.getItem('valores') === 'contador-si') {
+                ingSrvInput.value = '';
+                sdaTermIInput.value = '';
+                llgTermIInput.value = '';
+                recesoInput.value = '';
+                sdaTermVInput.value = '';
+                llgTermVInput.value = '';
+            }
+            
             phase = 'ida';
             currentSegmentStart = Date.now();
-            btnIniciarIda.disabled = true;
+            
+            // Cambiar botones
+            btnIniciarIda.textContent = '▶ Iniciar Ramal - VUELTA';
+            btnIniciarIda.onclick = iniciarVuelta;
+            btnIniciarIda.className = 'btn btn-warning';
+            btnIniciarIda.style.backgroundColor = '#f59e0b';
+            
             btnFinalizarIda.disabled = false;
-            btnFinalizarIda.textContent = '⏹ Finalizar ramal - IDA';
+            btnFinalizarIda.textContent = '⏹ Finalizar Ramal - IDA';
             btnFinalizarIda.onclick = finalizarIda;
+            
             timerInterval = setInterval(updateDisplay, 200);
             updateDisplay();
+        }
+
+        function iniciarVuelta() {
+            if (phase !== 'espera') {
+                // Si estamos en IDA y se presiona el botón de vuelta, forzamos finalizar IDA primero
+                if (phase === 'ida') {
+                    finalizarIda();
+                    // Después de finalizar IDA, esperamos un momento y luego iniciamos vuelta
+                    setTimeout(() => {
+                        if (phase === 'espera') {
+                            // Forzar el inicio de la vuelta después de la espera
+                            esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+                            currentElapsed = 0;
+                            phase = 'vuelta';
+                            currentSegmentStart = Date.now();
+                            updateDisplay();
+                            
+                            btnIniciarIda.disabled = true;
+                            btnIniciarIda.textContent = '⏳ En curso...';
+                            
+                            btnFinalizarIda.disabled = false;
+                            btnFinalizarIda.textContent = '⏹ Finalizar Ramal - VUELTA';
+                            btnFinalizarIda.onclick = finalizarVuelta;
+                        }
+                    }, 500);
+                    return;
+                }
+                return;
+            }
+            
+            // Si estamos en espera, iniciar vuelta
+            esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+            currentElapsed = 0;
+            phase = 'vuelta';
+            currentSegmentStart = Date.now();
+            updateDisplay();
+            
+            btnIniciarIda.disabled = true;
+            btnIniciarIda.textContent = '⏳ En curso...';
+            
+            btnFinalizarIda.disabled = false;
+            btnFinalizarIda.textContent = '⏹ Finalizar Ramal - VUELTA';
+            btnFinalizarIda.onclick = finalizarVuelta;
         }
 
         function finalizarIda() {
@@ -822,32 +961,32 @@
             idaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
             currentElapsed = 0;
 
+            // Calcular espera
             const formato = document.getElementById('formatoSelect').value;
             if (formato === 'merlo') {
                 const esperaCalculada = Math.max(0, 2 * idaTime - totalRouteSeconds);
                 esperaDuration = esperaCalculada;
-                document.getElementById('receso').value = Math.round(esperaCalculada / 60);
+                if (localStorage.getItem('valores') === 'contador-si') {
+                    recesoInput.value = Math.round(esperaCalculada / 60);
+                }
             } else {
                 esperaDuration = (parseInt(document.getElementById('receso').value) || 15) * 60;
             }
 
             phase = 'espera';
             currentSegmentStart = Date.now();
+            
             btnFinalizarIda.disabled = true;
+            btnFinalizarIda.textContent = '⏳ En espera...';
+            
+            // Habilitar botón de iniciar vuelta
+            btnIniciarIda.disabled = false;
+            btnIniciarIda.textContent = '▶ Iniciar Ramal - VUELTA';
+            btnIniciarIda.onclick = iniciarVuelta;
+            btnIniciarIda.className = 'btn btn-warning';
+            btnIniciarIda.style.backgroundColor = '#f59e0b';
+            
             updateDisplay();
-
-            setTimeout(() => {
-                if (phase === 'espera') {
-                    esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
-                    currentElapsed = 0;
-                    phase = 'vuelta';
-                    currentSegmentStart = Date.now();
-                    updateDisplay();
-                    btnFinalizarIda.disabled = false;
-                    btnFinalizarIda.textContent = '⏹ Finalizar ramal - VUELTA';
-                    btnFinalizarIda.onclick = finalizarVuelta;
-                }
-            }, esperaDuration * 1000);
         }
 
         function finalizarVuelta() {
@@ -856,10 +995,17 @@
             currentElapsed = 0;
             detenerTimer();
             phase = 'idle';
+            
             btnIniciarIda.disabled = false;
+            btnIniciarIda.textContent = '▶ Iniciar Ramal - IDA';
+            btnIniciarIda.onclick = iniciarIda;
+            btnIniciarIda.className = 'btn btn-success';
+            btnIniciarIda.style.backgroundColor = '';
+            
             btnFinalizarIda.disabled = true;
-            btnFinalizarIda.textContent = '⏹ Finalizar ramal - IDA';
+            btnFinalizarIda.textContent = '⏹ Finalizar Ramal - IDA';
             btnFinalizarIda.onclick = finalizarIda;
+            
             updateDisplay();
         }
 
@@ -980,6 +1126,7 @@
             });
         }
 
+        // Inicialización
         setInterval(actualizarReloj, 1000);
         actualizarReloj();
 
