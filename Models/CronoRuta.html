@@ -639,6 +639,7 @@
         let currentElapsed = 0;
         let esperaDuration = 0;
         let esperaConfirmada = false;
+        let idaFinalizada = false;
 
         const timeDisplay = document.getElementById('timeDisplay');
         const phaseIndicator = document.getElementById('phaseIndicator');
@@ -660,6 +661,9 @@
         const sdaTermVInput = document.getElementById('sda-term-v');
         const llgTermVInput = document.getElementById('llg-term-v');
         const recesoInput = document.getElementById('receso');
+        const nameInput = document.getElementById('name');
+        const legajoInput = document.getElementById('legajo');
+        const intInput = document.getElementById('int');
 
         // Botones "Ahora"
         const btnIngSrv = document.getElementById('btn-ing-srv');
@@ -667,6 +671,31 @@
         const btnLlgTermI = document.getElementById('btn-llg-term-i');
         const btnSdaTermV = document.getElementById('btn-sda-term-v');
         const btnLlgTermV = document.getElementById('btn-llg-term-v');
+
+        // Cargar datos del chofer guardados
+        function cargarDatosChofer() {
+            try {
+                const nombre = localStorage.getItem('chofer_nombre');
+                const legajo = localStorage.getItem('chofer_legajo');
+                const interno = localStorage.getItem('chofer_interno');
+                if (nombre) nameInput.value = nombre;
+                if (legajo) legajoInput.value = legajo;
+                if (interno) intInput.value = interno;
+            } catch (error) {
+                console.error('Error al cargar datos del chofer:', error);
+            }
+        }
+
+        // Guardar datos del chofer
+        function guardarDatosChofer() {
+            try {
+                localStorage.setItem('chofer_nombre', nameInput.value.trim());
+                localStorage.setItem('chofer_legajo', legajoInput.value.trim());
+                localStorage.setItem('chofer_interno', intInput.value.trim());
+            } catch (error) {
+                console.error('Error al guardar datos del chofer:', error);
+            }
+        }
 
         function saveData(value) {
             try {
@@ -865,8 +894,8 @@
                 sdaTermIInput.value = shh + ':' + smm;
             }
             
-            // Auto-completar llegada de IDA (2da cabecera) cuando se completa el tiempo de IDA
-            if (phase === 'ida' && idaTime + currentElapsed >= totalRouteSeconds && !llgTermIInput.value) {
+            // Auto-completar llegada de IDA (2da cabecera) cuando se finaliza la IDA
+            if (idaFinalizada && !llgTermIInput.value) {
                 llgTermIInput.value = timeStr;
             }
             
@@ -903,6 +932,7 @@
             vueltaTime = 0;
             currentElapsed = 0;
             esperaConfirmada = false;
+            idaFinalizada = false;
             
             // Limpiar campos de tiempo previos si está en modo automático
             if (localStorage.getItem('valores') === 'contador-si') {
@@ -968,6 +998,15 @@
         function continuarFinalizarIda() {
             idaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
             currentElapsed = 0;
+            idaFinalizada = true;
+
+            // Auto-completar llegada de IDA (2da cabecera)
+            if (localStorage.getItem('valores') === 'contador-si') {
+                const now = new Date();
+                const hh = String(now.getHours()).padStart(2, '0');
+                const mm = String(now.getMinutes()).padStart(2, '0');
+                llgTermIInput.value = hh + ':' + mm;
+            }
 
             phase = 'espera';
             currentSegmentStart = Date.now();
@@ -1080,31 +1119,27 @@
         }
 
         function completar() {
+            // Guardar datos del chofer
+            guardarDatosChofer();
+
             const name = document.getElementById('name').value.trim();
             const legajo = document.getElementById('legajo').value.trim();
             const interno = document.getElementById('int').value.trim();
             const ingSrv = document.getElementById('ing-srv').value;
             const sdaTermI = document.getElementById('sda-term-i').value;
             const llgTermI = document.getElementById('llg-term-i').value;
-            const recesoInput = document.getElementById('receso');
+            const recesoValor = document.getElementById('receso').value;
             const sdaTermV = document.getElementById('sda-term-v').value;
             const llgTermV = document.getElementById('llg-term-v').value;
             const formato = document.getElementById('formatoSelect').value;
 
-            if (!name || !interno || !ingSrv || !sdaTermI || !llgTermI || !recesoInput.value || !sdaTermV || !llgTermV) {
+            if (!name || !interno || !ingSrv || !sdaTermI || !llgTermI || !recesoValor || !sdaTermV || !llgTermV) {
                 alert('⚠️ Por favor, complete todos los campos antes de enviar.');
                 return;
             }
             if (!formato) {
                 alert('⚠️ Por favor, seleccione un formato.');
                 return;
-            }
-
-            let recesoValor = recesoInput.value;
-            if (formato === 'merlo' && idaTime > 0) {
-                const esperaAuto = Math.max(0, 2 * idaTime - totalRouteSeconds);
-                recesoValor = Math.round(esperaAuto / 60);
-                recesoInput.value = recesoValor;
             }
 
             let plantilla = '';
@@ -1187,6 +1222,9 @@
         // Inicialización
         setInterval(actualizarReloj, 1000);
         actualizarReloj();
+
+        // Cargar datos del chofer guardados
+        cargarDatosChofer();
 
         if (!localStorage.getItem('valores')) {
             document.getElementById('preferenciasOverlay').classList.add('active');
