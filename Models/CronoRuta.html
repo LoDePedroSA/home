@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="../Assets/Logo Nuevo LDP.png" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../Assets/Logo Nuevo LDP.png" type="image/x-icon">
     <title>CronoRuta Pro</title>
     <style>
-        /* (estilos sin cambios) */
         :root {
             --bg: #1a1a2e;
             --surface: #16213e;
@@ -226,7 +225,6 @@
             flex: 1;
             min-width: 120px;
             font-family: inherit;
-            user-select: none;
         }
 
         .btn:active {
@@ -283,37 +281,23 @@
             box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
         }
 
-        .btn-control {
+        .btn-main {
             background: var(--accent);
             color: #fff;
-            padding: 14px 20px;
             font-size: 1.1rem;
+            padding: 14px 20px;
+            width: 100%;
             font-weight: 700;
             letter-spacing: 1px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-            text-transform: uppercase;
         }
-        .btn-control:hover:not(:disabled) {
+        .btn-main:hover {
             background: #0284c7;
-            box-shadow: 0 0 25px rgba(14, 165, 233, 0.5);
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.5);
         }
-        .btn-control:disabled {
+        .btn-main:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
-        }
-        .btn-control.state-ida {
-            background: var(--success);
-        }
-        .btn-control.state-vuelta {
-            background: var(--warning);
-        }
-        .btn-control.state-final {
-            background: var(--danger);
+            box-shadow: none;
         }
 
         .form-group {
@@ -496,6 +480,10 @@
                 width: 18px;
                 height: 18px;
             }
+            .btn-main {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
         }
     </style>
 </head>
@@ -534,16 +522,13 @@
         <div class="separator"></div>
 
         <div class="card">
-            <button class="btn-control" id="btnControl">Iniciar Ramal - S: IDA</button>
-        </div>
-
-        <div class="separator"></div>
-
-        <div class="card">
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="abrirModal('ramal')">📝 Definir ramal</button>
                 <button class="btn btn-outline" onclick="abrirModal('linea')">📝 Definir línea</button>
                 <button class="btn btn-outline" onclick="abrirModal('tiempo')">⏱️ Definir tiempo recorrido</button>
+            </div>
+            <div style="margin-top:12px;">
+                <button class="btn btn-main" id="btnMain">Iniciar Ramal - S: IDA</button>
             </div>
         </div>
 
@@ -554,23 +539,23 @@
 
             <div class="form-group">
                 <label>Ingrese su Nombre y Apellido:</label>
-                <input type="text" id="name" placeholder="Ej: Juan Pérez">
+                <input type="text" id="name" placeholder="Ej: Juan Pérez" autocomplete="on">
             </div>
 
             <div class="form-group">
                 <label>Ingrese su legajo:</label>
-                <input type="text" id="legajo" placeholder="Ej: 2001">
+                <input type="text" id="legajo" placeholder="Ej: 2001" autocomplete="on">
             </div>
 
             <div class="form-group">
                 <label>Ingrese su número de interno:</label>
-                <input type="text" id="int" placeholder="Ej: 4521">
+                <input type="text" id="int" placeholder="Ej: 4521" autocomplete="on">
             </div>
 
             <div class="form-group">
                 <label>Horario de Ingreso de Servicio:</label>
                 <div class="input-row">
-                    <input type="time" id="ing-srv">
+                    <input type="time" id="ing-srv" autocomplete="on">
                     <button class="btn btn-outline" onclick="setNow('ing-srv')" id="btn-ing-srv">🕐 Ahora</button>
                 </div>
             </div>
@@ -578,7 +563,7 @@
             <div class="form-group">
                 <label>Horario de Salida de la 1er Cabecera:</label>
                 <div class="input-row">
-                    <input type="time" id="sda-term-i">
+                    <input type="time" id="sda-term-i" autocomplete="on">
                     <button class="btn btn-outline" onclick="setNow('sda-term-i')" id="btn-sda-term-i">🕐 Ahora</button>
                 </div>
             </div>
@@ -586,20 +571,20 @@
             <div class="form-group">
                 <label>Horario de Llegada a la 2da Cabecera:</label>
                 <div class="input-row">
-                    <input type="time" id="llg-term-i">
+                    <input type="time" id="llg-term-i" autocomplete="on">
                     <button class="btn btn-outline" onclick="setNow('llg-term-i')" id="btn-llg-term-i">🕐 Ahora</button>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Tiempo de descanso (minutos):</label>
-                <input type="number" id="receso" placeholder="Ej: 15" min="0" value="15">
+                <input type="number" id="receso" placeholder="Ej: 15" min="0" value="15" autocomplete="on">
             </div>
 
             <div class="form-group">
                 <label>Horario de Salida hacia la 1er Cabecera:</label>
                 <div class="input-row">
-                    <input type="time" id="sda-term-v">
+                    <input type="time" id="sda-term-v" autocomplete="on">
                     <button class="btn btn-outline" onclick="setNow('sda-term-v')" id="btn-sda-term-v">🕐 Ahora</button>
                 </div>
             </div>
@@ -607,7 +592,7 @@
             <div class="form-group">
                 <label>Horario de Llegada a la 1er Cabecera:</label>
                 <div class="input-row">
-                    <input type="time" id="llg-term-v">
+                    <input type="time" id="llg-term-v" autocomplete="on">
                     <button class="btn btn-outline" onclick="setNow('llg-term-v')" id="btn-llg-term-v">🕐 Ahora</button>
                 </div>
             </div>
@@ -650,7 +635,6 @@
         </div>
     </div>
 
-    <!-- Modal para preguntar espera -->
     <div class="modal-overlay" id="esperaModal">
         <div class="modal">
             <h3>⏳ Tiempo de espera</h3>
@@ -665,751 +649,633 @@
     <div class="toast" id="toast">✅ Copiado al portapapeles</div>
 
     <script>
-        // ============================
-        // SONIDO
-        // ============================
-        const sound = new Audio('../Assets/sound1.mp3');
+        (function(){
+            // Variables de estado
+            let ramal = '';
+            let linea = '';
+            let totalRouteSeconds = 600;
+            let phase = 'idle'; // idle, ida, espera, vuelta
+            let mainState = 1; // 1:Iniciar IDA, 2:Finalizar IDA, 3:Iniciar VUELTA, 4:Finalizar VUELTA
+            let idaTime = 0;
+            let esperaTime = 0;
+            let vueltaTime = 0;
+            let currentSegmentStart = null;
+            let timerInterval = null;
+            let currentElapsed = 0;
+            let esperaDuration = 0;
+            let esperaConfirmada = false;
+            let idaFinalizada = false;
+            let isProcessing = false;
 
-        function playSound() {
-            sound.currentTime = 0;
-            sound.play().catch(e => console.warn('Error reproduciendo sonido:', e));
-        }
+            const timeDisplay = document.getElementById('timeDisplay');
+            const phaseIndicator = document.getElementById('phaseIndicator');
+            const totalTimeDisplay = document.getElementById('totalTimeDisplay');
+            const ramalDisplay = document.getElementById('ramalDisplay');
+            const lineaDisplay = document.getElementById('lineaDisplay');
+            const routeTimeBadge = document.getElementById('routeTimeBadge');
+            const btnMain = document.getElementById('btnMain');
+            const resultPanel = document.getElementById('resultPanel');
+            const btnCopy = document.getElementById('btnCopy');
+            const toast = document.getElementById('toast');
+            const clockDisplay = document.getElementById('clockDisplay');
 
-        // ============================
-        // DEBOUNCE GLOBAL (0.5s)
-        // ============================
-        let lastClickTime = 0;
-        const DEBOUNCE_MS = 500;
+            const ingSrvInput = document.getElementById('ing-srv');
+            const sdaTermIInput = document.getElementById('sda-term-i');
+            const llgTermIInput = document.getElementById('llg-term-i');
+            const sdaTermVInput = document.getElementById('sda-term-v');
+            const llgTermVInput = document.getElementById('llg-term-v');
+            const recesoInput = document.getElementById('receso');
+            const nameInput = document.getElementById('name');
+            const legajoInput = document.getElementById('legajo');
+            const intInput = document.getElementById('int');
 
-        function canClick() {
-            const now = Date.now();
-            if (now - lastClickTime < DEBOUNCE_MS) {
-                return false;
-            }
-            lastClickTime = now;
-            return true;
-        }
+            const btnIngSrv = document.getElementById('btn-ing-srv');
+            const btnSdaTermI = document.getElementById('btn-sda-term-i');
+            const btnLlgTermI = document.getElementById('btn-llg-term-i');
+            const btnSdaTermV = document.getElementById('btn-sda-term-v');
+            const btnLlgTermV = document.getElementById('btn-llg-term-v');
 
-        // ============================
-        // ESTADO DEL CRONÓMETRO
-        // ============================
-        let ramal = '';
-        let linea = '';
-        let totalRouteSeconds = 600; // 10 min por defecto
-        let phase = 'idle';          // 'idle', 'ida', 'espera', 'vuelta'
-        let idaTime = 0;
-        let esperaTime = 0;
-        let vueltaTime = 0;
-        let currentSegmentStart = null;
-        let timerInterval = null;
-        let currentElapsed = 0;
-        let esperaDuration = 0;      // segundos de espera
-        let idaFinalizada = false;
-        let esperaTimer = null;      // timeout para la espera
-
-        // Estado del botón (1-4)
-        let botonEstado = 1; // 1: Iniciar IDA, 2: Finalizar IDA, 3: Iniciar VUELTA, 4: Finalizar VUELTA
-
-        // Elementos
-        const timeDisplay = document.getElementById('timeDisplay');
-        const phaseIndicator = document.getElementById('phaseIndicator');
-        const totalTimeDisplay = document.getElementById('totalTimeDisplay');
-        const ramalDisplay = document.getElementById('ramalDisplay');
-        const lineaDisplay = document.getElementById('lineaDisplay');
-        const routeTimeBadge = document.getElementById('routeTimeBadge');
-        const btnControl = document.getElementById('btnControl');
-        const resultPanel = document.getElementById('resultPanel');
-        const btnCopy = document.getElementById('btnCopy');
-        const toast = document.getElementById('toast');
-        const clockDisplay = document.getElementById('clockDisplay');
-
-        // Inputs
-        const ingSrvInput = document.getElementById('ing-srv');
-        const sdaTermIInput = document.getElementById('sda-term-i');
-        const llgTermIInput = document.getElementById('llg-term-i');
-        const sdaTermVInput = document.getElementById('sda-term-v');
-        const llgTermVInput = document.getElementById('llg-term-v');
-        const recesoInput = document.getElementById('receso');
-        const nameInput = document.getElementById('name');
-        const legajoInput = document.getElementById('legajo');
-        const intInput = document.getElementById('int');
-
-        // ============================
-        // FUNCIONES DE ACTUALIZACIÓN
-        // ============================
-        function formatTime(totalSeconds) {
-            const isNegative = totalSeconds < 0;
-            const abs = Math.abs(totalSeconds);
-            const mins = Math.floor(abs / 60);
-            const secs = abs % 60;
-            const sign = isNegative ? '- ' : '+ ';
-            return sign + String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-        }
-
-        function getTimeString(seconds) {
-            const totalSeconds = Math.floor(seconds);
-            const mins = Math.floor(totalSeconds / 60);
-            const secs = totalSeconds % 60;
-            return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-        }
-
-        function updateDisplay() {
-            if (currentSegmentStart && phase !== 'idle' && phase !== 'espera') {
-                currentElapsed = Math.floor((Date.now() - currentSegmentStart) / 1000);
+            // ---- Sonidos ----
+            function playSound(file) {
+                try {
+                    const audio = new Audio('../Assets/' + file);
+                    audio.play().catch(e => console.warn('Audio no reproducido:', e));
+                } catch(e) {}
             }
 
-            let displayTime = 0;
-            let cssClass = 'paused';
-            let remaining = 0;
+            function playStartSound() { playSound('start.mp3'); }
+            function playClickSound() { playSound('sound1.mp3'); }
 
-            if (phase === 'ida') {
-                const totalElapsed = idaTime + currentElapsed;
-                remaining = totalRouteSeconds - totalElapsed;
-                displayTime = remaining > 0 ? -remaining : Math.abs(remaining);
-            } else if (phase === 'espera') {
-                // Mostramos el tiempo de espera transcurrido
-                displayTime = esperaTime + currentElapsed;
-                cssClass = 'going';
-            } else if (phase === 'vuelta') {
-                const totalElapsed = vueltaTime + currentElapsed;
-                remaining = totalRouteSeconds - totalElapsed;
-                displayTime = remaining > 0 ? -remaining : Math.abs(remaining);
+            // ---- Debounce de 0.5s para todos los botones ----
+            function blockButtons(ms = 500) {
+                if (isProcessing) return false;
+                isProcessing = true;
+                document.querySelectorAll('button:not(.navbar-btn)').forEach(b => b.disabled = true);
+                setTimeout(() => {
+                    document.querySelectorAll('button:not(.navbar-btn)').forEach(b => b.disabled = false);
+                    isProcessing = false;
+                }, ms);
+                return true;
             }
 
-            if (phase === 'ida' || phase === 'vuelta') {
-                const ratio = remaining / totalRouteSeconds;
-                if (remaining > 0 && ratio > 0.55) {
-                    cssClass = 'going';
-                } else if (remaining > 0 && ratio >= 0.45) {
-                    cssClass = 'warning';
-                } else {
-                    cssClass = 'returning';
+            // ---- Funciones de audio en eventos específicos ----
+            function handleStartSound() { playStartSound(); }
+
+            // ---- Actualizar interfaz ----
+            function formatTime(totalSeconds) {
+                const isNegative = totalSeconds < 0;
+                const abs = Math.abs(totalSeconds);
+                const mins = Math.floor(abs / 60);
+                const secs = abs % 60;
+                const sign = isNegative ? '- ' : '+ ';
+                return sign + String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+            }
+
+            function updateDisplay() {
+                if (currentSegmentStart && phase !== 'idle') {
+                    currentElapsed = Math.floor((Date.now() - currentSegmentStart) / 1000);
                 }
+
+                let displayTime = 0;
+                let cssClass = 'paused';
+                let remaining = 0;
+
+                if (phase === 'ida') {
+                    const totalElapsed = idaTime + currentElapsed;
+                    remaining = totalRouteSeconds - totalElapsed;
+                    displayTime = remaining > 0 ? -remaining : Math.abs(remaining);
+                } else if (phase === 'espera') {
+                    displayTime = esperaTime + currentElapsed;
+                    cssClass = 'going';
+                } else if (phase === 'vuelta') {
+                    const totalElapsed = vueltaTime + currentElapsed;
+                    remaining = totalRouteSeconds - totalElapsed;
+                    displayTime = remaining > 0 ? -remaining : Math.abs(remaining);
+                }
+
+                if (phase === 'ida' || phase === 'vuelta') {
+                    const ratio = remaining / totalRouteSeconds;
+                    if (remaining > 0 && ratio > 0.55) {
+                        cssClass = 'going';
+                    } else if (remaining > 0 && ratio >= 0.45) {
+                        cssClass = 'warning';
+                    } else {
+                        cssClass = 'returning';
+                    }
+                }
+
+                timeDisplay.textContent = formatTime(displayTime);
+                timeDisplay.className = 'time-display ' + cssClass;
+
+                let phaseText = '⏳ Esperando inicio';
+                let phaseClass = 'phase-ida';
+                if (phase === 'ida') { phaseText = '🟢 IDA'; phaseClass = 'phase-ida'; }
+                else if (phase === 'espera') { phaseText = '🟡 ESPERA'; phaseClass = 'phase-espera'; }
+                else if (phase === 'vuelta') { phaseText = '🔴 VUELTA'; phaseClass = 'phase-vuelta'; }
+                phaseIndicator.textContent = phaseText;
+                phaseIndicator.className = 'phase-indicator ' + phaseClass;
+
+                const total = idaTime + currentElapsed + esperaTime + vueltaTime;
+                totalTimeDisplay.innerHTML = `Tiempo total: <strong>${formatTime(total)}</strong>`;
+
+                autoCompletarCampos();
             }
 
-            timeDisplay.textContent = formatTime(displayTime);
-            timeDisplay.className = 'time-display ' + cssClass;
-
-            let phaseText = '';
-            let phaseClass = '';
-            if (phase === 'ida') {
-                phaseText = '🟢 IDA';
-                phaseClass = 'phase-ida';
-            } else if (phase === 'espera') {
-                phaseText = '🟡 ESPERA';
-                phaseClass = 'phase-espera';
-            } else if (phase === 'vuelta') {
-                phaseText = '🔴 VUELTA';
-                phaseClass = 'phase-vuelta';
-            } else {
-                phaseText = '⏳ Esperando inicio';
-                phaseClass = 'phase-ida';
-            }
-            phaseIndicator.textContent = phaseText;
-            phaseIndicator.className = 'phase-indicator ' + phaseClass;
-
-            const total = idaTime + currentElapsed + esperaTime + vueltaTime;
-            totalTimeDisplay.innerHTML = `Tiempo total: <strong>${formatTime(total)}</strong>`;
-
-            // Auto-completar campos
-            autoCompletarCampos();
-        }
-
-        function autoCompletarCampos() {
-            const valor = localStorage.getItem('valores');
-            if (valor !== 'contador-si') return;
-
-            const now = new Date();
-            const hh = String(now.getHours()).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            const timeStr = hh + ':' + mm;
-
-            if (phase === 'ida' && !ingSrvInput.value) {
-                ingSrvInput.value = timeStr;
-            }
-
-            if (phase === 'ida' && currentElapsed > 0 && !sdaTermIInput.value) {
-                const startTime = new Date(Date.now() - (idaTime + currentElapsed) * 1000);
-                const shh = String(startTime.getHours()).padStart(2, '0');
-                const smm = String(startTime.getMinutes()).padStart(2, '0');
-                sdaTermIInput.value = shh + ':' + smm;
-            }
-
-            if (idaFinalizada && !llgTermIInput.value) {
-                llgTermIInput.value = timeStr;
-            }
-
-            if (phase === 'espera' && !recesoInput.value && esperaDuration > 0) {
-                const esperaMin = Math.floor(esperaDuration / 60);
-                recesoInput.value = esperaMin || 15;
-            }
-
-            if (phase === 'vuelta' && currentElapsed > 0 && !sdaTermVInput.value) {
-                const startTime = new Date(Date.now() - (vueltaTime + currentElapsed) * 1000);
-                const shh = String(startTime.getHours()).padStart(2, '0');
-                const smm = String(startTime.getMinutes()).padStart(2, '0');
-                sdaTermVInput.value = shh + ':' + smm;
-            }
-
-            if (phase === 'vuelta' && vueltaTime + currentElapsed >= totalRouteSeconds && !llgTermVInput.value) {
-                llgTermVInput.value = timeStr;
-            }
-        }
-
-        // ============================
-        // CONTROL DEL BOTÓN PRINCIPAL
-        // ============================
-        function handleControl() {
-            if (!canClick()) return;
-
-            // Verificar que ramal y línea estén definidos (excepto cuando ya está en curso)
-            if (!ramal || !linea) {
-                alert('⚠️ Por favor, defina el ramal y la línea antes de iniciar.');
-                return;
-            }
-
-            switch (botonEstado) {
-                case 1:
-                    // Iniciar IDA
-                    iniciarIda();
-                    break;
-                case 2:
-                    // Finalizar IDA
-                    finalizarIda();
-                    break;
-                case 3:
-                    // Iniciar VUELTA
-                    iniciarVuelta();
-                    break;
-                case 4:
-                    // Finalizar VUELTA
-                    finalizarVuelta();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        // ============================
-        // FUNCIONES DE ACCIÓN
-        // ============================
-        function iniciarIda() {
-            if (phase !== 'idle') return;
-
-            // Reiniciar tiempos
-            idaTime = 0;
-            esperaTime = 0;
-            vueltaTime = 0;
-            currentElapsed = 0;
-            idaFinalizada = false;
-            esperaDuration = 0;
-
-            // Limpiar campos de tiempo si está en modo automático
-            if (localStorage.getItem('valores') === 'contador-si') {
-                ingSrvInput.value = '';
-                sdaTermIInput.value = '';
-                llgTermIInput.value = '';
-                recesoInput.value = '';
-                sdaTermVInput.value = '';
-                llgTermVInput.value = '';
-            }
-
-            phase = 'ida';
-            currentSegmentStart = Date.now();
-            botonEstado = 2;
-            actualizarBoton();
-            playSound(); // Sonido al iniciar IDA
-
-            // Habilitar timer
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(updateDisplay, 200);
-            updateDisplay();
-        }
-
-        function finalizarIda() {
-            if (phase !== 'ida') return;
-
-            // Guardar tiempo de IDA
-            idaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
-            currentElapsed = 0;
-            idaFinalizada = true;
-
-            // Mostrar modal para espera
-            mostrarModalEspera();
-        }
-
-        function mostrarModalEspera() {
-            document.getElementById('esperaModal').classList.add('active');
-            document.getElementById('esperaInput').focus();
-        }
-
-        function confirmarEspera() {
-            const input = document.getElementById('esperaInput');
-            const minutos = parseFloat(input.value);
-            if (isNaN(minutos) || minutos < 0) {
-                alert('⚠️ Por favor, ingrese un número válido de minutos.');
-                return;
-            }
-
-            esperaDuration = minutos * 60;
-
-            // Actualizar campo de receso
-            if (localStorage.getItem('valores') === 'contador-si') {
-                recesoInput.value = minutos;
-            }
-
-            document.getElementById('esperaModal').classList.remove('active');
-
-            // Iniciar espera
-            phase = 'espera';
-            currentSegmentStart = Date.now();
-            botonEstado = 3; // El botón pasará a "Iniciar VUELTA" después de la espera
-            btnControl.disabled = true;
-            btnControl.textContent = '⏳ Esperando...';
-            btnControl.className = 'btn-control';
-
-            // Sonido al finalizar IDA (ya se reprodujo al hacer clic en finalizar, pero lo dejamos)
-            playSound();
-
-            // Programar el fin de la espera
-            if (esperaTimer) clearTimeout(esperaTimer);
-            esperaTimer = setTimeout(() => {
-                // Terminar espera, pasar a vuelta automáticamente?
-                // Según el flujo, después de la espera el botón debe estar en "Iniciar VUELTA" (estado 3)
-                // y el usuario debe presionarlo manualmente.
-                phase = 'idle'; // Volvemos a idle para que el botón de inicio de vuelta funcione
-                // Pero el botón debe estar en estado 3 y habilitado
-                botonEstado = 3;
-                actualizarBoton();
-                btnControl.disabled = false;
-                // Actualizar display
-                updateDisplay();
-                // Limpiar timeout
-                esperaTimer = null;
-            }, esperaDuration * 1000);
-
-            // Actualizar display durante la espera
-            timerInterval = setInterval(updateDisplay, 200);
-            updateDisplay();
-        }
-
-        function iniciarVuelta() {
-            if (phase !== 'idle' || botonEstado !== 3) return;
-
-            // Reiniciar elapsed para vuelta
-            vueltaTime = 0;
-            currentElapsed = 0;
-            phase = 'vuelta';
-            currentSegmentStart = Date.now();
-            botonEstado = 4;
-            actualizarBoton();
-            playSound(); // Sonido al iniciar VUELTA
-
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(updateDisplay, 200);
-            updateDisplay();
-        }
-
-        function finalizarVuelta() {
-            if (phase !== 'vuelta') return;
-
-            vueltaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
-            currentElapsed = 0;
-            detenerTimer();
-
-            // Auto-completar llegada de vuelta
-            if (localStorage.getItem('valores') === 'contador-si') {
+            // ---- Auto-completar campos según modo contador ----
+            function autoCompletarCampos() {
+                const valor = localStorage.getItem('valores');
+                if (valor !== 'contador-si') return;
                 const now = new Date();
                 const hh = String(now.getHours()).padStart(2, '0');
                 const mm = String(now.getMinutes()).padStart(2, '0');
-                llgTermVInput.value = hh + ':' + mm;
+                const timeStr = hh + ':' + mm;
+
+                if (phase === 'ida' && !ingSrvInput.value) {
+                    ingSrvInput.value = timeStr;
+                }
+                if (phase === 'ida' && currentElapsed > 0 && !sdaTermIInput.value) {
+                    const startTime = new Date(Date.now() - (idaTime + currentElapsed) * 1000);
+                    const shh = String(startTime.getHours()).padStart(2, '0');
+                    const smm = String(startTime.getMinutes()).padStart(2, '0');
+                    sdaTermIInput.value = shh + ':' + smm;
+                }
+                if (idaFinalizada && !llgTermIInput.value) {
+                    llgTermIInput.value = timeStr;
+                }
+                if (phase === 'espera' && !recesoInput.value && esperaConfirmada) {
+                    const esperaMin = Math.floor(esperaDuration / 60);
+                    recesoInput.value = esperaMin || 15;
+                }
+                if (phase === 'vuelta' && currentElapsed > 0 && !sdaTermVInput.value) {
+                    const startTime = new Date(Date.now() - (vueltaTime + currentElapsed) * 1000);
+                    const shh = String(startTime.getHours()).padStart(2, '0');
+                    const smm = String(startTime.getMinutes()).padStart(2, '0');
+                    sdaTermVInput.value = shh + ':' + smm;
+                }
+                if (phase === 'vuelta' && vueltaTime + currentElapsed >= totalRouteSeconds && !llgTermVInput.value) {
+                    llgTermVInput.value = timeStr;
+                }
             }
 
-            phase = 'idle';
-            botonEstado = 1;
-            actualizarBoton();
-            playSound(); // Sonido al finalizar VUELTA
-
-            updateDisplay();
-        }
-
-        function detenerTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
+            // ---- Actualizar texto del botón principal ----
+            function updateMainButton() {
+                const texts = {
+                    1: 'Iniciar Ramal - S: IDA',
+                    2: 'Finalizar Ramal - S: IDA',
+                    3: 'Iniciar Ramal - S: VUELTA',
+                    4: 'Finalizar Ramal - S: VUELTA'
+                };
+                btnMain.textContent = texts[mainState] || 'Iniciar Ramal - S: IDA';
             }
-            currentSegmentStart = null;
-            currentElapsed = 0;
-        }
 
-        // ============================
-        // ACTUALIZAR BOTÓN
-        // ============================
-        function actualizarBoton() {
-            let texto = '';
-            let clase = 'btn-control';
-            switch (botonEstado) {
-                case 1:
-                    texto = 'Iniciar Ramal - S: IDA';
-                    clase += ' state-ida';
-                    break;
-                case 2:
-                    texto = 'Finalizar Ramal - S: IDA';
-                    clase += ' state-ida';
-                    break;
-                case 3:
-                    texto = 'Iniciar Ramal - S: VUELTA';
-                    clase += ' state-vuelta';
-                    break;
-                case 4:
-                    texto = 'Finalizar Ramal - S: VUELTA';
-                    clase += ' state-final';
-                    break;
-                default:
-                    texto = 'Iniciar Ramal - S: IDA';
-                    clase += ' state-ida';
+            // ---- Acciones del botón principal ----
+            function handleMainClick() {
+                if (!blockButtons()) return;
+                playClickSound();
+
+                if (mainState === 1) {
+                    // Iniciar IDA
+                    if (!ramal || !linea) {
+                        alert('⚠️ Por favor, defina el ramal y la línea antes de iniciar.');
+                        return;
+                    }
+                    // Reiniciar todo
+                    detenerTimer();
+                    idaTime = 0;
+                    esperaTime = 0;
+                    vueltaTime = 0;
+                    currentElapsed = 0;
+                    esperaConfirmada = false;
+                    idaFinalizada = false;
+                    if (localStorage.getItem('valores') === 'contador-si') {
+                        ingSrvInput.value = '';
+                        sdaTermIInput.value = '';
+                        llgTermIInput.value = '';
+                        recesoInput.value = '';
+                        sdaTermVInput.value = '';
+                        llgTermVInput.value = '';
+                    }
+                    phase = 'ida';
+                    currentSegmentStart = Date.now();
+                    mainState = 2;
+                    updateMainButton();
+                    handleStartSound();
+                    timerInterval = setInterval(updateDisplay, 200);
+                    updateDisplay();
+                }
+                else if (mainState === 2) {
+                    // Finalizar IDA -> mostrar modal espera
+                    if (phase !== 'ida') return;
+                    document.getElementById('esperaModal').classList.add('active');
+                    document.getElementById('esperaInput').focus();
+                }
+                else if (mainState === 3) {
+                    // Iniciar VUELTA
+                    if (phase !== 'espera') return;
+                    esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+                    currentElapsed = 0;
+                    phase = 'vuelta';
+                    currentSegmentStart = Date.now();
+                    mainState = 4;
+                    updateMainButton();
+                    handleStartSound();
+                    updateDisplay();
+                }
+                else if (mainState === 4) {
+                    // Finalizar VUELTA
+                    if (phase !== 'vuelta') return;
+                    vueltaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+                    currentElapsed = 0;
+                    detenerTimer();
+                    phase = 'idle';
+                    mainState = 1;
+                    updateMainButton();
+                    handleStartSound();
+                    if (localStorage.getItem('valores') === 'contador-si') {
+                        const now = new Date();
+                        const hh = String(now.getHours()).padStart(2, '0');
+                        const mm = String(now.getMinutes()).padStart(2, '0');
+                        llgTermVInput.value = hh + ':' + mm;
+                    }
+                    updateDisplay();
+                }
             }
-            btnControl.textContent = texto;
-            btnControl.className = clase;
-            btnControl.disabled = false; // se habilita a menos que esté en espera
-        }
 
-        // ============================
-        // MODALES EXISTENTES
-        // ============================
-        function abrirModal(mode) {
-            // ... (igual que antes, sin cambios)
-        }
-
-        function cerrarModal() {
-            // ...
-        }
-
-        // (Las funciones abrirModal, cerrarModal, saveData, etc. permanecen igual)
-
-        // ============================
-        // FUNCIONES DE PREFERENCIAS
-        // ============================
-        function saveData(value) {
-            try {
-                localStorage.setItem('valores', value);
-                cerrarPreferencias();
-                aplicarPreferencias();
-                mostrarToast('✅ Preferencia guardada correctamente');
-            } catch (error) {
-                console.error('Error al guardar en localStorage:', error);
-            }
-        }
-
-        function aplicarPreferencias() {
-            const valor = localStorage.getItem('valores');
-            const campos = ['ing-srv', 'sda-term-i', 'llg-term-i', 'receso', 'sda-term-v', 'llg-term-v'];
-            const botones = ['btn-ing-srv', 'btn-sda-term-i', 'btn-llg-term-i', 'btn-sda-term-v', 'btn-llg-term-v'];
-
-            campos.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.disabled = (valor === 'contador-si');
-            });
-            botones.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.disabled = (valor === 'contador-si');
-            });
-        }
-
-        function abrirModalPreferencias() {
-            document.getElementById('preferenciasOverlay').classList.add('active');
-        }
-
-        function cerrarPreferencias() {
-            document.getElementById('preferenciasOverlay').classList.remove('active');
-        }
-
-        // ============================
-        // SET NOW
-        // ============================
-        function setNow(inputId) {
-            if (!canClick()) return;
-            const now = new Date();
-            const hh = String(now.getHours()).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById(inputId).value = hh + ':' + mm;
-        }
-
-        // ============================
-        // COMPLETAR FORMULARIO
-        // ============================
-        function completar() {
-            // ... (igual que antes)
-        }
-
-        function copiarAlPortapapeles() {
-            // ... (igual que antes)
-        }
-
-        // ============================
-        // RELOJ
-        // ============================
-        function actualizarReloj() {
-            const ahora = new Date();
-            const hh = String(ahora.getHours()).padStart(2, '0');
-            const mm = String(ahora.getMinutes()).padStart(2, '0');
-            clockDisplay.textContent = hh + ':' + mm;
-        }
-
-        // ============================
-        // CARGA DE DATOS DEL CHOFER
-        // ============================
-        function cargarDatosChofer() {
-            try {
-                const nombre = localStorage.getItem('chofer_nombre');
-                const legajo = localStorage.getItem('chofer_legajo');
-                const interno = localStorage.getItem('chofer_interno');
-                if (nombre) nameInput.value = nombre;
-                if (legajo) legajoInput.value = legajo;
-                if (interno) intInput.value = interno;
-            } catch (error) {
-                console.error('Error al cargar datos del chofer:', error);
-            }
-        }
-
-        function guardarDatosChofer() {
-            try {
-                localStorage.setItem('chofer_nombre', nameInput.value.trim());
-                localStorage.setItem('chofer_legajo', legajoInput.value.trim());
-                localStorage.setItem('chofer_interno', intInput.value.trim());
-            } catch (error) {
-                console.error('Error al guardar datos del chofer:', error);
-            }
-        }
-
-        // ============================
-        // EVENTO TECLA ENTER
-        // ============================
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                const target = e.target;
-                // Si el foco está en un input, select o botón, no interferir
-                if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'BUTTON') {
+            // ---- Confirmar espera ----
+            function confirmarEspera() {
+                const input = document.getElementById('esperaInput');
+                const minutos = parseFloat(input.value);
+                if (isNaN(minutos) || minutos < 0) {
+                    alert('⚠️ Por favor, ingrese un número válido de minutos.');
                     return;
                 }
-                e.preventDefault();
-                // Simular clic en el botón principal
-                if (!btnControl.disabled) {
-                    handleControl();
+                esperaDuration = minutos * 60;
+                esperaConfirmada = true;
+                if (localStorage.getItem('valores') === 'contador-si') {
+                    recesoInput.value = minutos;
                 }
-            }
-        });
-
-        // ============================
-        // INICIALIZACIÓN
-        // ============================
-        // Asignar evento al botón principal
-        btnControl.addEventListener('click', handleControl);
-
-        // Reloj
-        setInterval(actualizarReloj, 1000);
-        actualizarReloj();
-
-        // Cargar datos chofer
-        cargarDatosChofer();
-
-        // Preferencias
-        if (!localStorage.getItem('valores')) {
-            document.getElementById('preferenciasOverlay').classList.add('active');
-        } else {
-            aplicarPreferencias();
-        }
-
-        // Sonido al abrir la página
-        playSound();
-
-        // Actualizar display inicial
-        actualizarBoton();
-        updateDisplay();
-
-        // (Asegurarse de que las funciones de modales y demás estén definidas, pero las dejamos igual)
-
-        // ============================
-        // FUNCIONES DE MODALES (copiadas del original)
-        // ============================
-        let modalMode = '';
-
-        function abrirModal(mode) {
-            modalMode = mode;
-            const title = document.getElementById('modalTitle');
-            const input = document.getElementById('modalInput');
-            if (mode === 'ramal') {
-                title.textContent = 'Definir Ramal';
-                input.value = ramal;
-                input.placeholder = 'Ej: R1';
-                input.type = 'text';
-            } else if (mode === 'linea') {
-                title.textContent = 'Definir Línea';
-                input.value = linea;
-                input.placeholder = 'Ej: 12';
-                input.type = 'text';
-            } else if (mode === 'tiempo') {
-                title.textContent = 'Definir tiempo del recorrido (minutos)';
-                input.value = totalRouteSeconds / 60;
-                input.placeholder = 'Ej: 10';
-                input.type = 'number';
-            }
-            document.getElementById('modalOverlay').classList.add('active');
-            input.focus();
-        }
-
-        function cerrarModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-        }
-
-        document.getElementById('modalConfirm').addEventListener('click', () => {
-            const input = document.getElementById('modalInput');
-            const valor = input.value.trim();
-            if (modalMode === 'ramal') {
-                ramal = valor;
-                ramalDisplay.textContent = valor || '—';
-            } else if (modalMode === 'linea') {
-                linea = valor;
-                lineaDisplay.textContent = valor || '—';
-            } else if (modalMode === 'tiempo') {
-                const minutos = parseFloat(valor);
-                if (!isNaN(minutos) && minutos > 0) {
-                    totalRouteSeconds = Math.round(minutos * 60);
-                    routeTimeBadge.textContent = `⏱️ ${Math.round(minutos)} min`;
-                }
-            }
-            cerrarModal();
-        });
-
-        document.getElementById('modalInput').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') document.getElementById('modalConfirm').click();
-            if (e.key === 'Escape') cerrarModal();
-        });
-
-        document.getElementById('modalOverlay').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) cerrarModal();
-        });
-
-        document.getElementById('esperaModal').addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
                 document.getElementById('esperaModal').classList.remove('active');
-            }
-        });
 
-        document.getElementById('esperaInput').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') confirmarEspera();
-        });
-
-        document.getElementById('preferenciasOverlay').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) cerrarPreferencias();
-        });
-
-        function mostrarToast(mensaje) {
-            toast.textContent = mensaje;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
-        }
-
-        // Completar y copiar
-        function completar() {
-            guardarDatosChofer();
-
-            const name = document.getElementById('name').value.trim();
-            const legajo = document.getElementById('legajo').value.trim();
-            const interno = document.getElementById('int').value.trim();
-            const ingSrv = document.getElementById('ing-srv').value;
-            const sdaTermI = document.getElementById('sda-term-i').value;
-            const llgTermI = document.getElementById('llg-term-i').value;
-            const recesoValor = document.getElementById('receso').value;
-            const sdaTermV = document.getElementById('sda-term-v').value;
-            const llgTermV = document.getElementById('llg-term-v').value;
-            const formato = document.getElementById('formatoSelect').value;
-
-            if (!name || !interno || !ingSrv || !sdaTermI || !llgTermI || !recesoValor || !sdaTermV || !llgTermV) {
-                alert('⚠️ Por favor, complete todos los campos antes de enviar.');
-                return;
-            }
-            if (!formato) {
-                alert('⚠️ Por favor, seleccione un formato.');
-                return;
+                // Finalizar IDA
+                if (phase === 'ida') {
+                    idaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+                    currentElapsed = 0;
+                    idaFinalizada = true;
+                    if (localStorage.getItem('valores') === 'contador-si') {
+                        const now = new Date();
+                        const hh = String(now.getHours()).padStart(2, '0');
+                        const mm = String(now.getMinutes()).padStart(2, '0');
+                        llgTermIInput.value = hh + ':' + mm;
+                    }
+                    phase = 'espera';
+                    currentSegmentStart = Date.now();
+                    mainState = 3;
+                    updateMainButton();
+                    handleStartSound();
+                    updateDisplay();
+                }
             }
 
-            let plantilla = '';
-
-            if (formato === 'merlo') {
-                const hoy = new Date();
-                const fechaStr = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
-                plantilla = `
-        *PLANILLA TRANSPORTES UNIDOS DE MERLO S.A*
-
-        *CHOFER*: ${name}
-        *LEGAJO*: ${legajo || '—'}
-        *INTERNO*: ${interno}
-        *RAMAL*: ${ramal || '—'}
-        *LINEA*: ${linea || '—'}
-        *FECHA*: ${fechaStr}
-
-        *RECORRIDO*
-
-        *IDA*
-
-        *HORARIO SALIDA*: ${sdaTermI}
-        *HORARIO LLEGADA*: ${llgTermI}
-
-        *ESPERA*: ${recesoValor}
-
-        *VUELTA*
-
-        *HORARIO DE SALIDA*: ${sdaTermV}
-        *HORARIO DE LLEGADA*: ${llgTermV}
-
-        *SATISFACCIÓN DE PASAJEROS/%*:
-        `.trim();
-            } else {
-                plantilla = `
-        *Planilla✍🏻*
-        *Horario de entrada:* ${ingSrv}
-        *Inicio...*
-
-        *Hora de salida de la Terminal:* ${sdaTermI}
-        *Hora de llegada al destino:* ${llgTermI}
-
-        *Descanso: ${recesoValor} minutos.*
-        *Vuelta...*
-
-        *Hora de salida de la Terminal:* ${sdaTermV}
-        *Hora de llegada a la Terminal:* ${llgTermV}
-
-        *Chófer:* ${name}
-        *Interno:* ${interno}
-        *Línea:* ${linea || '—'}-${ramal || '—'}
-        `.trim();
+            // ---- Detener timer ----
+            function detenerTimer() {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                currentSegmentStart = null;
+                currentElapsed = 0;
             }
 
-            resultPanel.textContent = plantilla;
-            resultPanel.classList.add('active');
-            btnCopy.style.display = 'block';
-        }
+            // ---- Funciones de modal genérico ----
+            let modalMode = '';
 
-        function copiarAlPortapapeles() {
-            const texto = resultPanel.textContent;
-            navigator.clipboard.writeText(texto).then(() => {
-                mostrarToast('✅ Copiado al portapapeles');
-            }).catch(() => {
-                alert('❌ No se pudo copiar. Intente manualmente.');
+            function abrirModal(mode) {
+                modalMode = mode;
+                const title = document.getElementById('modalTitle');
+                const input = document.getElementById('modalInput');
+                if (mode === 'ramal') {
+                    title.textContent = 'Definir Ramal';
+                    input.value = ramal;
+                    input.placeholder = 'Ej: R1';
+                    input.type = 'text';
+                } else if (mode === 'linea') {
+                    title.textContent = 'Definir Línea';
+                    input.value = linea;
+                    input.placeholder = 'Ej: 12';
+                    input.type = 'text';
+                } else if (mode === 'tiempo') {
+                    title.textContent = 'Definir tiempo del recorrido (minutos)';
+                    input.value = totalRouteSeconds / 60;
+                    input.placeholder = 'Ej: 10';
+                    input.type = 'number';
+                }
+                document.getElementById('modalOverlay').classList.add('active');
+                input.focus();
+            }
+
+            function cerrarModal() {
+                document.getElementById('modalOverlay').classList.remove('active');
+            }
+
+            document.getElementById('modalConfirm').addEventListener('click', () => {
+                const input = document.getElementById('modalInput');
+                const valor = input.value.trim();
+                if (modalMode === 'ramal') {
+                    ramal = valor;
+                    ramalDisplay.textContent = valor || '—';
+                    localStorage.setItem('ramal_guardado', valor);
+                } else if (modalMode === 'linea') {
+                    linea = valor;
+                    lineaDisplay.textContent = valor || '—';
+                    localStorage.setItem('linea_guardado', valor);
+                } else if (modalMode === 'tiempo') {
+                    const minutos = parseFloat(valor);
+                    if (!isNaN(minutos) && minutos > 0) {
+                        totalRouteSeconds = Math.round(minutos * 60);
+                        routeTimeBadge.textContent = `⏱️ ${Math.round(minutos)} min`;
+                        localStorage.setItem('tiempo_guardado', minutos);
+                    }
+                }
+                cerrarModal();
             });
-        }
 
-        // Asegurar que el botón de control esté deshabilitado durante la espera
-        // y se actualice correctamente.
-        // También al hacer clic en "Iniciar VUELTA" (estado 3) se debe permitir.
-        // Ya está implementado.
+            document.getElementById('modalInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') document.getElementById('modalConfirm').click();
+                if (e.key === 'Escape') cerrarModal();
+            });
 
-        // Pequeña corrección: cuando se finaliza IDA y se confirma espera, se deshabilita el botón
-        // y se cambia a "Esperando...". Luego al terminar la espera, se habilita con estado 3.
-        // Todo ok.
+            document.getElementById('modalOverlay').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) cerrarModal();
+            });
 
-        console.log('CronoRuta Pro actualizado con un solo botón y debounce de 0.5s');
+            // ---- Preferencias ----
+            function abrirModalPreferencias() {
+                document.getElementById('preferenciasOverlay').classList.add('active');
+            }
+
+            function cerrarPreferencias() {
+                document.getElementById('preferenciasOverlay').classList.remove('active');
+            }
+
+            document.getElementById('preferenciasOverlay').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) cerrarPreferencias();
+            });
+
+            function saveData(value) {
+                try {
+                    localStorage.setItem('valores', value);
+                    cerrarPreferencias();
+                    aplicarPreferencias();
+                    mostrarToast('✅ Preferencia guardada correctamente');
+                } catch (error) {
+                    console.error('Error al guardar en localStorage:', error);
+                }
+            }
+
+            function aplicarPreferencias() {
+                const valor = localStorage.getItem('valores');
+                const campos = ['ing-srv', 'sda-term-i', 'llg-term-i', 'receso', 'sda-term-v', 'llg-term-v'];
+                const botones = ['btn-ing-srv', 'btn-sda-term-i', 'btn-llg-term-i', 'btn-sda-term-v', 'btn-llg-term-v'];
+                campos.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.disabled = (valor === 'contador-si');
+                });
+                botones.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.disabled = (valor === 'contador-si');
+                });
+            }
+
+            // ---- Autoguardado de inputs ----
+            function guardarInput(id) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const val = el.value;
+                if (val) localStorage.setItem('input_' + id, val);
+                else localStorage.removeItem('input_' + id);
+            }
+
+            function cargarInputs() {
+                const ids = ['name','legajo','int','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v'];
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    const saved = localStorage.getItem('input_' + id);
+                    if (saved) el.value = saved;
+                });
+                // Ramal, línea, tiempo
+                const ramalGuardado = localStorage.getItem('ramal_guardado');
+                if (ramalGuardado) { ramal = ramalGuardado; ramalDisplay.textContent = ramalGuardado; }
+                const lineaGuardado = localStorage.getItem('linea_guardado');
+                if (lineaGuardado) { linea = lineaGuardado; lineaDisplay.textContent = lineaGuardado; }
+                const tiempoGuardado = localStorage.getItem('tiempo_guardado');
+                if (tiempoGuardado) {
+                    const min = parseFloat(tiempoGuardado);
+                    if (!isNaN(min) && min > 0) {
+                        totalRouteSeconds = Math.round(min * 60);
+                        routeTimeBadge.textContent = `⏱️ ${Math.round(min)} min`;
+                    }
+                }
+                // datos chofer
+                try {
+                    const nombre = localStorage.getItem('chofer_nombre');
+                    const legajo = localStorage.getItem('chofer_legajo');
+                    const interno = localStorage.getItem('chofer_interno');
+                    if (nombre) document.getElementById('name').value = nombre;
+                    if (legajo) document.getElementById('legajo').value = legajo;
+                    if (interno) document.getElementById('int').value = interno;
+                } catch(e) {}
+            }
+
+            function guardarDatosChofer() {
+                try {
+                    localStorage.setItem('chofer_nombre', document.getElementById('name').value.trim());
+                    localStorage.setItem('chofer_legajo', document.getElementById('legajo').value.trim());
+                    localStorage.setItem('chofer_interno', document.getElementById('int').value.trim());
+                } catch(e) {}
+            }
+
+            // ---- Toast ----
+            function mostrarToast(mensaje) {
+                toast.textContent = mensaje;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
+            // ---- Set Now ----
+            function setNow(inputId) {
+                const now = new Date();
+                const hh = String(now.getHours()).padStart(2, '0');
+                const mm = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById(inputId).value = hh + ':' + mm;
+                guardarInput(inputId);
+            }
+
+            // ---- Reloj ----
+            function actualizarReloj() {
+                const ahora = new Date();
+                const hh = String(ahora.getHours()).padStart(2, '0');
+                const mm = String(ahora.getMinutes()).padStart(2, '0');
+                clockDisplay.textContent = hh + ':' + mm;
+            }
+
+            // ---- Completar formulario ----
+            function completar() {
+                guardarDatosChofer();
+                const name = document.getElementById('name').value.trim();
+                const legajo = document.getElementById('legajo').value.trim();
+                const interno = document.getElementById('int').value.trim();
+                const ingSrv = document.getElementById('ing-srv').value;
+                const sdaTermI = document.getElementById('sda-term-i').value;
+                const llgTermI = document.getElementById('llg-term-i').value;
+                const recesoValor = document.getElementById('receso').value;
+                const sdaTermV = document.getElementById('sda-term-v').value;
+                const llgTermV = document.getElementById('llg-term-v').value;
+                const formato = document.getElementById('formatoSelect').value;
+
+                if (!name || !interno || !ingSrv || !sdaTermI || !llgTermI || !recesoValor || !sdaTermV || !llgTermV) {
+                    alert('⚠️ Por favor, complete todos los campos antes de enviar.');
+                    return;
+                }
+                if (!formato) {
+                    alert('⚠️ Por favor, seleccione un formato.');
+                    return;
+                }
+
+                let plantilla = '';
+                if (formato === 'merlo') {
+                    const hoy = new Date();
+                    const fechaStr = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
+                    plantilla = `
+*PLANILLA TRANSPORTES UNIDOS DE MERLO S.A*
+
+*CHOFER*: ${name}
+*LEGAJO*: ${legajo || '—'}
+*INTERNO*: ${interno}
+*RAMAL*: ${ramal || '—'}
+*LINEA*: ${linea || '—'}
+*FECHA*: ${fechaStr}
+
+*RECORRIDO*
+
+*IDA*
+
+*HORARIO SALIDA*: ${sdaTermI}
+*HORARIO LLEGADA*: ${llgTermI}
+
+*ESPERA*: ${recesoValor}
+
+*VUELTA*
+
+*HORARIO DE SALIDA*: ${sdaTermV}
+*HORARIO DE LLEGADA*: ${llgTermV}
+
+*SATISFACCIÓN DE PASAJEROS/%*:
+`.trim();
+                } else {
+                    plantilla = `
+*Planilla✍🏻*
+*Horario de entrada:* ${ingSrv}
+*Inicio...*
+
+*Hora de salida de la Terminal:* ${sdaTermI}
+*Hora de llegada al destino:* ${llgTermI}
+
+*Descanso: ${recesoValor} minutos.*
+*Vuelta...*
+
+*Hora de salida de la Terminal:* ${sdaTermV}
+*Hora de llegada a la Terminal:* ${llgTermV}
+
+*Chófer:* ${name}
+*Interno:* ${interno}
+*Línea:* ${linea || '—'}-${ramal || '—'}
+`.trim();
+                }
+
+                resultPanel.textContent = plantilla;
+                resultPanel.classList.add('active');
+                btnCopy.style.display = 'block';
+            }
+
+            function copiarAlPortapapeles() {
+                const texto = resultPanel.textContent;
+                navigator.clipboard.writeText(texto).then(() => {
+                    mostrarToast('✅ Copiado al portapapeles');
+                }).catch(() => {
+                    alert('❌ No se pudo copiar. Intente manualmente.');
+                });
+            }
+
+            // ---- Evento Enter global ----
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const target = e.target;
+                    if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'BUTTON') {
+                        return;
+                    }
+                    // Si no está en un campo, simular clic en botón principal
+                    e.preventDefault();
+                    btnMain.click();
+                }
+            });
+
+            // ---- Inicialización ----
+            window.addEventListener('load', () => {
+                cargarInputs();
+                aplicarPreferencias();
+                if (!localStorage.getItem('valores')) {
+                    document.getElementById('preferenciasOverlay').classList.add('active');
+                }
+                updateMainButton();
+                updateDisplay();
+                actualizarReloj();
+                setInterval(actualizarReloj, 1000);
+                // Reproducir start al abrir la página
+                setTimeout(playStartSound, 500);
+            });
+
+            // ---- Eventos de inputs para guardar ----
+            document.querySelectorAll('input, select').forEach(el => {
+                el.addEventListener('change', function() {
+                    if (this.id) guardarInput(this.id);
+                });
+                el.addEventListener('input', function() {
+                    if (this.id) {
+                        clearTimeout(this._timer);
+                        this._timer = setTimeout(() => guardarInput(this.id), 1000);
+                    }
+                });
+            });
+
+            // ---- Asignar evento al botón principal ----
+            btnMain.addEventListener('click', handleMainClick);
+
+            // ---- Exponer funciones globales ----
+            window.abrirModalPreferencias = abrirModalPreferencias;
+            window.saveData = saveData;
+            window.abrirModal = abrirModal;
+            window.cerrarModal = cerrarModal;
+            window.setNow = setNow;
+            window.completar = completar;
+            window.copiarAlPortapapeles = copiarAlPortapapeles;
+            window.confirmarEspera = confirmarEspera;
+            window.mostrarToast = mostrarToast;
+
+            // ---- Cerrar modal de espera con Escape ----
+            document.getElementById('esperaModal').addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('esperaModal').classList.remove('active');
+                }
+            });
+            document.getElementById('esperaInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') confirmarEspera();
+            });
+
+            // Iniciar con estado 1
+            mainState = 1;
+            updateMainButton();
+        })();
     </script>
 </body>
 </html>
