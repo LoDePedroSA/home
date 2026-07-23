@@ -603,6 +603,7 @@
                     <option value="" disabled selected>Seleccione un formato</option>
                     <option value="linea12">Empresa Linea 12</option>
                     <option value="merlo">Transportes Unidos de Merlo S.A.</option>
+                    <option value="primeroJulio">Planilla Primero de Julio S.A.</option>
                 </select>
             </div>
 
@@ -666,6 +667,7 @@
             let esperaConfirmada = false;
             let idaFinalizada = false;
             let isProcessing = false;
+            let esperaAutomaticaDisparada = false; // bandera para evitar múltiples disparos
 
             const timeDisplay = document.getElementById('timeDisplay');
             const phaseIndicator = document.getElementById('phaseIndicator');
@@ -721,6 +723,20 @@
             // ---- Funciones de audio en eventos específicos ----
             function handleStartSound() { playStartSound(); }
 
+            // ---- Función para iniciar la vuelta (tanto manual como automática) ----
+            function iniciarVuelta() {
+                if (phase !== 'espera') return;
+                // Sumar el tiempo de espera transcurrido (por si acaso)
+                esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
+                currentElapsed = 0;
+                phase = 'vuelta';
+                currentSegmentStart = Date.now();
+                mainState = 4;
+                updateMainButton();
+                playStartSound(); // sonido al iniciar la vuelta
+                updateDisplay();
+            }
+
             // ---- Actualizar interfaz ----
             function formatTime(totalSeconds) {
                 const isNegative = totalSeconds < 0;
@@ -747,12 +763,25 @@
                 } else if (phase === 'espera') {
                     displayTime = esperaTime + currentElapsed;
                     cssClass = 'going';
+                    // Verificar si ya se alcanzó el tiempo de espera y disparar la vuelta automática
+                    if (esperaDuration > 0 && currentElapsed >= esperaDuration && !esperaAutomaticaDisparada) {
+                        esperaAutomaticaDisparada = true;
+                        iniciarVuelta();
+                        // La función iniciarVuelta cambia el phase, así que no seguimos con el resto de la lógica de espera
+                        // pero como ya cambió phase, al terminar updateDisplay se actualizará correctamente.
+                        // Sin embargo, para evitar que se siga ejecutando la lógica de espera, retornamos.
+                        // Pero como ya se llamó a iniciarVuelta, ya se actualizó el display, así que podemos retornar.
+                        return;
+                    }
                 } else if (phase === 'vuelta') {
                     const totalElapsed = vueltaTime + currentElapsed;
                     remaining = totalRouteSeconds - totalElapsed;
                     displayTime = remaining > 0 ? -remaining : Math.abs(remaining);
                 }
 
+                // Solo actualizar si no se disparó la vuelta automática (o si phase no es espera)
+                // Si se disparó, ya retornamos arriba.
+                // Pero si no se disparó, seguimos.
                 if (phase === 'ida' || phase === 'vuelta') {
                     const ratio = remaining / totalRouteSeconds;
                     if (remaining > 0 && ratio > 0.55) {
@@ -847,6 +876,7 @@
                     currentElapsed = 0;
                     esperaConfirmada = false;
                     idaFinalizada = false;
+                    esperaAutomaticaDisparada = false;
                     if (localStorage.getItem('valores') === 'contador-si') {
                         ingSrvInput.value = '';
                         sdaTermIInput.value = '';
@@ -870,16 +900,9 @@
                     document.getElementById('esperaInput').focus();
                 }
                 else if (mainState === 3) {
-                    // Iniciar VUELTA
+                    // Iniciar VUELTA (manual)
                     if (phase !== 'espera') return;
-                    esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
-                    currentElapsed = 0;
-                    phase = 'vuelta';
-                    currentSegmentStart = Date.now();
-                    mainState = 4;
-                    updateMainButton();
-                    handleStartSound();
-                    updateDisplay();
+                    iniciarVuelta();
                 }
                 else if (mainState === 4) {
                     // Finalizar VUELTA
@@ -911,6 +934,7 @@
                 }
                 esperaDuration = minutos * 60;
                 esperaConfirmada = true;
+                esperaAutomaticaDisparada = false; // reiniciar bandera
                 if (localStorage.getItem('valores') === 'contador-si') {
                     recesoInput.value = minutos;
                 }
@@ -1172,7 +1196,7 @@
 
 *SATISFACCIÓN DE PASAJEROS/%*:
 `.trim();
-                } else {
+                } else if (formato === 'linea12') {
                     plantilla = `
 *Planilla✍🏻*
 *Horario de entrada:* ${ingSrv}
@@ -1190,6 +1214,30 @@
 *Chófer:* ${name}
 *Interno:* ${interno}
 *Línea:* ${linea || '—'}-${ramal || '—'}
+`.trim();
+                } else if (formato === 'primeroJulio') {
+                    plantilla = `
+_*PLANILLA PRIMERO DE JULIO SA*_
+
+Línea: ${linea || '—'}
+
+Nombre: ${name}
+
+Interno: ${interno}
+
+*HORARIOS:*
+
+*IDA:*
+
+Salida: ${sdaTermI}
+
+Llegada: ${llgTermI}
+
+*VUELTA:*
+
+Salida: ${sdaTermV}
+
+Llegada: ${llgTermV}
 `.trim();
                 }
 
