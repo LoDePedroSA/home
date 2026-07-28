@@ -597,6 +597,12 @@
                 </div>
             </div>
 
+            <!-- NUEVO CAMPO: Satisfacción -->
+            <div class="form-group">
+                <label>Satisfacción (opcional):</label>
+                <input type="text" id="satisfaccion" placeholder="Ej: Excelente" autocomplete="on">
+            </div>
+
             <div class="form-group">
                 <label>Seleccione el formato a completar:</label>
                 <select id="formatoSelect">
@@ -604,6 +610,7 @@
                     <option value="linea12">Empresa Linea 12</option>
                     <option value="merlo">Transportes Unidos de Merlo S.A.</option>
                     <option value="primeroJulio">Planilla Primero de Julio S.A.</option>
+                    <option value="transporteBsAs">Transporte Bs. As. S.A.</option> <!-- NUEVA OPCIÓN -->
                 </select>
             </div>
 
@@ -667,7 +674,7 @@
             let esperaConfirmada = false;
             let idaFinalizada = false;
             let isProcessing = false;
-            let esperaAutomaticaDisparada = false; // bandera para evitar múltiples disparos
+            let esperaAutomaticaDisparada = false;
 
             const timeDisplay = document.getElementById('timeDisplay');
             const phaseIndicator = document.getElementById('phaseIndicator');
@@ -690,6 +697,7 @@
             const nameInput = document.getElementById('name');
             const legajoInput = document.getElementById('legajo');
             const intInput = document.getElementById('int');
+            const satisfaccionInput = document.getElementById('satisfaccion');
 
             const btnIngSrv = document.getElementById('btn-ing-srv');
             const btnSdaTermI = document.getElementById('btn-sda-term-i');
@@ -726,14 +734,13 @@
             // ---- Función para iniciar la vuelta (tanto manual como automática) ----
             function iniciarVuelta() {
                 if (phase !== 'espera') return;
-                // Sumar el tiempo de espera transcurrido (por si acaso)
                 esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
                 currentElapsed = 0;
                 phase = 'vuelta';
                 currentSegmentStart = Date.now();
                 mainState = 4;
                 updateMainButton();
-                playStartSound(); // sonido al iniciar la vuelta
+                playStartSound();
                 updateDisplay();
             }
 
@@ -763,14 +770,9 @@
                 } else if (phase === 'espera') {
                     displayTime = esperaTime + currentElapsed;
                     cssClass = 'going';
-                    // Verificar si ya se alcanzó el tiempo de espera y disparar la vuelta automática
                     if (esperaDuration > 0 && currentElapsed >= esperaDuration && !esperaAutomaticaDisparada) {
                         esperaAutomaticaDisparada = true;
                         iniciarVuelta();
-                        // La función iniciarVuelta cambia el phase, así que no seguimos con el resto de la lógica de espera
-                        // pero como ya cambió phase, al terminar updateDisplay se actualizará correctamente.
-                        // Sin embargo, para evitar que se siga ejecutando la lógica de espera, retornamos.
-                        // Pero como ya se llamó a iniciarVuelta, ya se actualizó el display, así que podemos retornar.
                         return;
                     }
                 } else if (phase === 'vuelta') {
@@ -779,9 +781,6 @@
                     displayTime = remaining > 0 ? -remaining : Math.abs(remaining);
                 }
 
-                // Solo actualizar si no se disparó la vuelta automática (o si phase no es espera)
-                // Si se disparó, ya retornamos arriba.
-                // Pero si no se disparó, seguimos.
                 if (phase === 'ida' || phase === 'vuelta') {
                     const ratio = remaining / totalRouteSeconds;
                     if (remaining > 0 && ratio > 0.55) {
@@ -863,12 +862,10 @@
                 playClickSound();
 
                 if (mainState === 1) {
-                    // Iniciar IDA
                     if (!ramal || !linea) {
                         alert('⚠️ Por favor, defina el ramal y la línea antes de iniciar.');
                         return;
                     }
-                    // Reiniciar todo
                     detenerTimer();
                     idaTime = 0;
                     esperaTime = 0;
@@ -894,18 +891,15 @@
                     updateDisplay();
                 }
                 else if (mainState === 2) {
-                    // Finalizar IDA -> mostrar modal espera
                     if (phase !== 'ida') return;
                     document.getElementById('esperaModal').classList.add('active');
                     document.getElementById('esperaInput').focus();
                 }
                 else if (mainState === 3) {
-                    // Iniciar VUELTA (manual)
                     if (phase !== 'espera') return;
                     iniciarVuelta();
                 }
                 else if (mainState === 4) {
-                    // Finalizar VUELTA
                     if (phase !== 'vuelta') return;
                     vueltaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
                     currentElapsed = 0;
@@ -934,13 +928,12 @@
                 }
                 esperaDuration = minutos * 60;
                 esperaConfirmada = true;
-                esperaAutomaticaDisparada = false; // reiniciar bandera
+                esperaAutomaticaDisparada = false;
                 if (localStorage.getItem('valores') === 'contador-si') {
                     recesoInput.value = minutos;
                 }
                 document.getElementById('esperaModal').classList.remove('active');
 
-                // Finalizar IDA
                 if (phase === 'ida') {
                     idaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
                     currentElapsed = 0;
@@ -1080,14 +1073,13 @@
             }
 
             function cargarInputs() {
-                const ids = ['name','legajo','int','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v'];
+                const ids = ['name','legajo','int','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion'];
                 ids.forEach(id => {
                     const el = document.getElementById(id);
                     if (!el) return;
                     const saved = localStorage.getItem('input_' + id);
                     if (saved) el.value = saved;
                 });
-                // Ramal, línea, tiempo
                 const ramalGuardado = localStorage.getItem('ramal_guardado');
                 if (ramalGuardado) { ramal = ramalGuardado; ramalDisplay.textContent = ramalGuardado; }
                 const lineaGuardado = localStorage.getItem('linea_guardado');
@@ -1100,7 +1092,6 @@
                         routeTimeBadge.textContent = `⏱️ ${Math.round(min)} min`;
                     }
                 }
-                // datos chofer
                 try {
                     const nombre = localStorage.getItem('chofer_nombre');
                     const legajo = localStorage.getItem('chofer_legajo');
@@ -1156,6 +1147,7 @@
                 const sdaTermV = document.getElementById('sda-term-v').value;
                 const llgTermV = document.getElementById('llg-term-v').value;
                 const formato = document.getElementById('formatoSelect').value;
+                const satisfaccion = document.getElementById('satisfaccion').value.trim();
 
                 if (!name || !interno || !ingSrv || !sdaTermI || !llgTermI || !recesoValor || !sdaTermV || !llgTermV) {
                     alert('⚠️ Por favor, complete todos los campos antes de enviar.');
@@ -1239,6 +1231,35 @@ Salida: ${sdaTermV}
 
 Llegada: ${llgTermV}
 `.trim();
+                } else if (formato === 'transporteBsAs') {
+                    plantilla = `
+*PLANILLA TRANSPORTE BS.AS S.A.*
+
+*Línea 218*
+
+*Nombre:* ${name}
+
+*Interno:* ${interno}
+
+*HORARIO⏱️:*
+
+*IDA⬆️*
+
+*Salida:* ${sdaTermI}
+
+*Llegada:* ${llgTermI}
+
+*Espera⬆️⬇️*
+_(${recesoValor} mins)_
+
+*VUELTA⬇️*
+
+*Salida:* ${sdaTermV}
+
+*Llegada:* ${llgTermV}
+
+*Satisfacción 😌:* ${satisfaccion || '_________________'}
+`.trim();
                 }
 
                 resultPanel.textContent = plantilla;
@@ -1262,7 +1283,6 @@ Llegada: ${llgTermV}
                     if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'BUTTON') {
                         return;
                     }
-                    // Si no está en un campo, simular clic en botón principal
                     e.preventDefault();
                     btnMain.click();
                 }
@@ -1279,7 +1299,6 @@ Llegada: ${llgTermV}
                 updateDisplay();
                 actualizarReloj();
                 setInterval(actualizarReloj, 1000);
-                // Reproducir start al abrir la página
                 setTimeout(playStartSound, 500);
             });
 
@@ -1320,7 +1339,6 @@ Llegada: ${llgTermV}
                 if (e.key === 'Enter') confirmarEspera();
             });
 
-            // Iniciar con estado 1
             mainState = 1;
             updateMainButton();
         })();
