@@ -597,7 +597,6 @@
                 </div>
             </div>
 
-            <!-- NUEVO CAMPO: Satisfacción -->
             <div class="form-group">
                 <label>Satisfacción (opcional):</label>
                 <input type="text" id="satisfaccion" placeholder="Ej: Excelente" autocomplete="on">
@@ -610,7 +609,8 @@
                     <option value="linea12">Empresa Linea 12</option>
                     <option value="merlo">Transportes Unidos de Merlo S.A.</option>
                     <option value="primeroJulio">Planilla Primero de Julio S.A.</option>
-                    <option value="transporteBsAs">Transporte Bs. As. S.A.</option> <!-- NUEVA OPCIÓN -->
+                    <option value="transporteBsAs">Transporte Bs. As. S.A.</option>
+                    <option value="iselin">Iselin Sociedad Anonima</option>
                 </select>
             </div>
 
@@ -658,12 +658,11 @@
 
     <script>
         (function(){
-            // Variables de estado
             let ramal = '';
             let linea = '';
             let totalRouteSeconds = 600;
-            let phase = 'idle'; // idle, ida, espera, vuelta
-            let mainState = 1; // 1:Iniciar IDA, 2:Finalizar IDA, 3:Iniciar VUELTA, 4:Finalizar VUELTA
+            let phase = 'idle';
+            let mainState = 1; 
             let idaTime = 0;
             let esperaTime = 0;
             let vueltaTime = 0;
@@ -705,7 +704,6 @@
             const btnSdaTermV = document.getElementById('btn-sda-term-v');
             const btnLlgTermV = document.getElementById('btn-llg-term-v');
 
-            // ---- Sonidos ----
             function playSound(file) {
                 try {
                     const audio = new Audio('../Assets/' + file);
@@ -716,7 +714,6 @@
             function playStartSound() { playSound('start.mp3'); }
             function playClickSound() { playSound('sound1.mp3'); }
 
-            // ---- Debounce de 0.5s para todos los botones ----
             function blockButtons(ms = 500) {
                 if (isProcessing) return false;
                 isProcessing = true;
@@ -728,10 +725,8 @@
                 return true;
             }
 
-            // ---- Funciones de audio en eventos específicos ----
             function handleStartSound() { playStartSound(); }
 
-            // ---- Función para iniciar la vuelta (tanto manual como automática) ----
             function iniciarVuelta() {
                 if (phase !== 'espera') return;
                 esperaTime += Math.floor((Date.now() - currentSegmentStart) / 1000);
@@ -744,7 +739,6 @@
                 updateDisplay();
             }
 
-            // ---- Actualizar interfaz ----
             function formatTime(totalSeconds) {
                 const isNegative = totalSeconds < 0;
                 const abs = Math.abs(totalSeconds);
@@ -809,7 +803,6 @@
                 autoCompletarCampos();
             }
 
-            // ---- Auto-completar campos según modo contador ----
             function autoCompletarCampos() {
                 const valor = localStorage.getItem('valores');
                 if (valor !== 'contador-si') return;
@@ -845,7 +838,6 @@
                 }
             }
 
-            // ---- Actualizar texto del botón principal ----
             function updateMainButton() {
                 const texts = {
                     1: 'Iniciar Ramal - S: IDA',
@@ -856,7 +848,6 @@
                 btnMain.textContent = texts[mainState] || 'Iniciar Ramal - S: IDA';
             }
 
-            // ---- Acciones del botón principal ----
             function handleMainClick() {
                 if (!blockButtons()) return;
                 playClickSound();
@@ -918,7 +909,6 @@
                 }
             }
 
-            // ---- Confirmar espera ----
             function confirmarEspera() {
                 const input = document.getElementById('esperaInput');
                 const minutos = parseFloat(input.value);
@@ -953,7 +943,6 @@
                 }
             }
 
-            // ---- Detener timer ----
             function detenerTimer() {
                 if (timerInterval) {
                     clearInterval(timerInterval);
@@ -963,7 +952,6 @@
                 currentElapsed = 0;
             }
 
-            // ---- Funciones de modal genérico ----
             let modalMode = '';
 
             function abrirModal(mode) {
@@ -1025,7 +1013,6 @@
                 if (e.target === e.currentTarget) cerrarModal();
             });
 
-            // ---- Preferencias ----
             function abrirModalPreferencias() {
                 document.getElementById('preferenciasOverlay').classList.add('active');
             }
@@ -1063,7 +1050,6 @@
                 });
             }
 
-            // ---- Autoguardado de inputs ----
             function guardarInput(id) {
                 const el = document.getElementById(id);
                 if (!el) return;
@@ -1110,14 +1096,12 @@
                 } catch(e) {}
             }
 
-            // ---- Toast ----
             function mostrarToast(mensaje) {
                 toast.textContent = mensaje;
                 toast.classList.add('show');
                 setTimeout(() => toast.classList.remove('show'), 2500);
             }
 
-            // ---- Set Now ----
             function setNow(inputId) {
                 const now = new Date();
                 const hh = String(now.getHours()).padStart(2, '0');
@@ -1126,7 +1110,6 @@
                 guardarInput(inputId);
             }
 
-            // ---- Reloj ----
             function actualizarReloj() {
                 const ahora = new Date();
                 const hh = String(ahora.getHours()).padStart(2, '0');
@@ -1134,7 +1117,6 @@
                 clockDisplay.textContent = hh + ':' + mm;
             }
 
-            // ---- Completar formulario ----
             function completar() {
                 guardarDatosChofer();
                 const name = document.getElementById('name').value.trim();
@@ -1231,6 +1213,23 @@ Salida: ${sdaTermV}
 
 Llegada: ${llgTermV}
 `.trim();
+                } else if (formato === 'iselin') {
+                    plantilla = `
+_*PLANILLAS ISELIN S.A.*_
+
+Línea: ${linea || '—'}
+Interno: ${interno}
+
+*IDA:*
+Salida: ${sdaTermI}
+Llegada: ${llgTermI}
+
+*VUELTA:*
+Salida: ${sdaTermV}
+Llegada: ${llgTermV}
+
+*Satisfacción:* ${satisfaccion || '_________________'}
+`.trim();
                 } else if (formato === 'transporteBsAs') {
                     plantilla = `
 *PLANILLA TRANSPORTE BS.AS S.A.*
@@ -1276,7 +1275,6 @@ _(${recesoValor} mins)_
                 });
             }
 
-            // ---- Evento Enter global ----
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     const target = e.target;
@@ -1288,7 +1286,6 @@ _(${recesoValor} mins)_
                 }
             });
 
-            // ---- Inicialización ----
             window.addEventListener('load', () => {
                 cargarInputs();
                 aplicarPreferencias();
@@ -1302,7 +1299,6 @@ _(${recesoValor} mins)_
                 setTimeout(playStartSound, 500);
             });
 
-            // ---- Eventos de inputs para guardar ----
             document.querySelectorAll('input, select').forEach(el => {
                 el.addEventListener('change', function() {
                     if (this.id) guardarInput(this.id);
@@ -1315,10 +1311,8 @@ _(${recesoValor} mins)_
                 });
             });
 
-            // ---- Asignar evento al botón principal ----
             btnMain.addEventListener('click', handleMainClick);
 
-            // ---- Exponer funciones globales ----
             window.abrirModalPreferencias = abrirModalPreferencias;
             window.saveData = saveData;
             window.abrirModal = abrirModal;
@@ -1329,7 +1323,6 @@ _(${recesoValor} mins)_
             window.confirmarEspera = confirmarEspera;
             window.mostrarToast = mostrarToast;
 
-            // ---- Cerrar modal de espera con Escape ----
             document.getElementById('esperaModal').addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     document.getElementById('esperaModal').classList.remove('active');
