@@ -609,8 +609,7 @@
                     <option value="linea12">Empresa Linea 12</option>
                     <option value="merlo">Transportes Unidos de Merlo S.A.</option>
                     <option value="primeroJulio">Planilla Primero de Julio S.A.</option>
-                    <option value="transporteBsAs">Transporte Bs. As. S.A.</option>
-                    <option value="iselin">Iselin Sociedad Anonima</option>
+                    <option value="MOGSM">M.O.G.S.M. S.A.C.</option>
                 </select>
             </div>
 
@@ -1213,51 +1212,34 @@ Salida: ${sdaTermV}
 
 Llegada: ${llgTermV}
 `.trim();
-                } else if (formato === 'iselin') {
+                } else if (formato === 'MOGSM') {
                     plantilla = `
-_*PLANILLAS ISELIN S.A.*_
+*PLANILLA MOGSM*
 
-Línea: ${linea || '—'}
-Interno: ${interno}
+_Nombre del chófer:_ ${name}
 
-*IDA:*
-Salida: ${sdaTermI}
-Llegada: ${llgTermI}
+_Interno:_ ${interno}
 
-*VUELTA:*
-Salida: ${sdaTermV}
-Llegada: ${llgTermV}
+_Línea:_ 707
 
-*Satisfacción:* ${satisfaccion || '_________________'}
-`.trim();
-                } else if (formato === 'transporteBsAs') {
-                    plantilla = `
-*PLANILLA TRANSPORTE BS.AS S.A.*
+_Ramal:_ BOULOGNE - SAN ISIDRO
 
-*Línea 218*
+*HORARIO:*
 
-*Nombre:* ${name}
+*IDA*
 
-*Interno:* ${interno}
+_Salida:_ ${sdaTermI}
 
-*HORARIO⏱️:*
+_Llegada:_ ${llgTermI}
 
-*IDA⬆️*
+VUELTA
+_Salida:_ ${sdaTermV}
 
-*Salida:* ${sdaTermI}
+_Llegada:_ ${llgTermV}
 
-*Llegada:* ${llgTermI}
+_¿Satisfacción?: ${satisfaccion || '_________________'}
 
-*Espera⬆️⬇️*
-_(${recesoValor} mins)_
-
-*VUELTA⬇️*
-
-*Salida:* ${sdaTermV}
-
-*Llegada:* ${llgTermV}
-
-*Satisfacción 😌:* ${satisfaccion || '_________________'}
+Fotos ✅
 `.trim();
                 }
 
