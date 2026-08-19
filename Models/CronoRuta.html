@@ -610,6 +610,7 @@
                     <option value="merlo">Transportes Unidos de Merlo S.A.</option>
                     <option value="primeroJulio">Planilla Primero de Julio S.A.</option>
                     <option value="MOGSM">M.O.G.S.M. S.A.C.</option>
+                    <option value="L324">Línea 324</option>
                 </select>
             </div>
 
@@ -1240,6 +1241,25 @@ _Llegada:_ ${llgTermV}
 _¿Satisfacción?: ${satisfaccion || '_________________'}
 
 Fotos ✅
+`.trim();
+                } else if (formato === 'L324') {
+                    const hoy = new Date();
+                    const fechaStr = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
+                    plantilla = `
+*Planilla:*
+*Fecha:* ${fechaStr}
+*Nombre del chófer:* ${name}
+*Línea:* 324
+*Interno:* ${interno}
+*Ramal:* ${ramal || '—'}
+
+*Ida*
+*Hora de salida:* ${sdaTermI}
+*Hora de llegada:* ${llgTermI}
+
+*Vuelta*
+*Hora de salida:* ${sdaTermV}
+*Hora de llegada:* ${llgTermV}
 `.trim();
                 }
 
