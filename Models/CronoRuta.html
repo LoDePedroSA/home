@@ -539,23 +539,28 @@
 
             <div class="form-group">
                 <label>Ingrese su Nombre y Apellido:</label>
-                <input type="text" id="name" placeholder="Ej: Juan Pérez" autocomplete="on">
+                <input type="text" id="name" placeholder="Ej: Juan Pérez" class="autocomplete" autocomplete="off">
             </div>
 
             <div class="form-group">
                 <label>Ingrese su legajo:</label>
-                <input type="text" id="legajo" placeholder="Ej: 2001" autocomplete="on">
+                <input type="text" id="legajo" placeholder="Ej: 2001" class="autocomplete" autocomplete="off">
             </div>
 
             <div class="form-group">
                 <label>Ingrese su número de interno:</label>
-                <input type="text" id="int" placeholder="Ej: 4521" autocomplete="on">
+                <input type="text" id="int" placeholder="Ej: 4521" class="autocomplete" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label>Modelo del colectivo (opcional):</label>
+                <input type="text" id="modelo" placeholder="Ej: Mercedes Benz" class="autocomplete" autocomplete="off">
             </div>
 
             <div class="form-group">
                 <label>Horario de Ingreso de Servicio:</label>
                 <div class="input-row">
-                    <input type="time" id="ing-srv" autocomplete="on">
+                    <input type="time" id="ing-srv" autocomplete="off">
                     <button class="btn btn-outline" onclick="setNow('ing-srv')" id="btn-ing-srv">🕐 Ahora</button>
                 </div>
             </div>
@@ -563,7 +568,7 @@
             <div class="form-group">
                 <label>Horario de Salida de la 1er Cabecera:</label>
                 <div class="input-row">
-                    <input type="time" id="sda-term-i" autocomplete="on">
+                    <input type="time" id="sda-term-i" autocomplete="off">
                     <button class="btn btn-outline" onclick="setNow('sda-term-i')" id="btn-sda-term-i">🕐 Ahora</button>
                 </div>
             </div>
@@ -571,20 +576,20 @@
             <div class="form-group">
                 <label>Horario de Llegada a la 2da Cabecera:</label>
                 <div class="input-row">
-                    <input type="time" id="llg-term-i" autocomplete="on">
+                    <input type="time" id="llg-term-i" autocomplete="off">
                     <button class="btn btn-outline" onclick="setNow('llg-term-i')" id="btn-llg-term-i">🕐 Ahora</button>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Tiempo de descanso (minutos):</label>
-                <input type="number" id="receso" placeholder="Ej: 15" min="0" value="15" autocomplete="on">
+                <input type="number" id="receso" placeholder="Ej: 15" min="0" value="15" autocomplete="off">
             </div>
 
             <div class="form-group">
                 <label>Horario de Salida hacia la 1er Cabecera:</label>
                 <div class="input-row">
-                    <input type="time" id="sda-term-v" autocomplete="on">
+                    <input type="time" id="sda-term-v" autocomplete="off">
                     <button class="btn btn-outline" onclick="setNow('sda-term-v')" id="btn-sda-term-v">🕐 Ahora</button>
                 </div>
             </div>
@@ -592,14 +597,14 @@
             <div class="form-group">
                 <label>Horario de Llegada a la 1er Cabecera:</label>
                 <div class="input-row">
-                    <input type="time" id="llg-term-v" autocomplete="on">
+                    <input type="time" id="llg-term-v" autocomplete="off">
                     <button class="btn btn-outline" onclick="setNow('llg-term-v')" id="btn-llg-term-v">🕐 Ahora</button>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Satisfacción (opcional):</label>
-                <input type="text" id="satisfaccion" placeholder="Ej: Excelente" autocomplete="on">
+                <input type="text" id="satisfaccion" placeholder="Ej: Excelente" class="autocomplete" autocomplete="off">
             </div>
 
             <div class="form-group">
@@ -610,6 +615,7 @@
                     <option value="merlo">Transportes Unidos de Merlo S.A.</option>
                     <option value="primeroJulio">Planilla Primero de Julio S.A.</option>
                     <option value="MOGSM">M.O.G.S.M. S.A.C.</option>
+                    <option value="eee">E.E.E. SRL</option>
                 </select>
             </div>
 
@@ -1058,7 +1064,7 @@
             }
 
             function cargarInputs() {
-                const ids = ['name','legajo','int','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion'];
+                const ids = ['name','legajo','int','modelo','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion'];
                 ids.forEach(id => {
                     const el = document.getElementById(id);
                     if (!el) return;
@@ -1116,11 +1122,67 @@
                 clockDisplay.textContent = hh + ':' + mm;
             }
 
+            // ----- Sistema de autocompletado con historial -----
+            function inicializarAutocompletado() {
+                const inputs = document.querySelectorAll('.autocomplete');
+                inputs.forEach(input => {
+                    const inputId = input.id;
+                    if (!inputId) return;
+                    // Crear datalist si no existe
+                    let datalist = document.getElementById('datalist_' + inputId);
+                    if (!datalist) {
+                        datalist = document.createElement('datalist');
+                        datalist.id = 'datalist_' + inputId;
+                        document.body.appendChild(datalist);
+                    }
+                    input.setAttribute('list', 'datalist_' + inputId);
+                    
+                    // Cargar historial al enfocar
+                    input.addEventListener('focus', function() {
+                        cargarHistorial(inputId);
+                    });
+                    
+                    // Guardar historial al cambiar
+                    input.addEventListener('input', function() {
+                        const valor = this.value.trim();
+                        if (valor.length > 0) {
+                            guardarHistorial(inputId, valor);
+                        }
+                    });
+                });
+            }
+
+            function cargarHistorial(inputId) {
+                const datalist = document.getElementById('datalist_' + inputId);
+                if (!datalist) return;
+                const historial = JSON.parse(localStorage.getItem('autocomplete_history') || '{}');
+                const valores = historial[inputId] || [];
+                datalist.innerHTML = '';
+                valores.forEach(val => {
+                    const option = document.createElement('option');
+                    option.value = val;
+                    datalist.appendChild(option);
+                });
+            }
+
+            function guardarHistorial(inputId, valor) {
+                const historial = JSON.parse(localStorage.getItem('autocomplete_history') || '{}');
+                if (!historial[inputId]) historial[inputId] = [];
+                let valores = historial[inputId];
+                valores = valores.filter(v => v !== valor);
+                valores.unshift(valor);
+                if (valores.length > 10) valores.pop();
+                historial[inputId] = valores;
+                localStorage.setItem('autocomplete_history', JSON.stringify(historial));
+            }
+            // ------------------------------------------------
+
             function completar() {
                 guardarDatosChofer();
                 const name = document.getElementById('name').value.trim();
                 const legajo = document.getElementById('legajo').value.trim();
                 const interno = document.getElementById('int').value.trim();
+                const modelo = document.getElementById('modelo').value.trim();
                 const ingSrv = document.getElementById('ing-srv').value;
                 const sdaTermI = document.getElementById('sda-term-i').value;
                 const llgTermI = document.getElementById('llg-term-i').value;
@@ -1241,6 +1303,31 @@ _¿Satisfacción?: ${satisfaccion || '_________________'}
 
 Fotos ✅
 `.trim();
+                } else if (formato === 'eee') {
+                    const hoy = new Date();
+                    const fechaStr = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
+                    plantilla = `
+🚌 E.E.E.SRL
+📋 PLANILLA DE RECORRIDO
+
+👤 Chófer: ${name}
+🚌 Colectivo: ${modelo || '—'}
+🔢 Interno: ${interno}
+🛣️ Línea: 306
+📆 Fecha: ${fechaStr}
+
+⏰ Hora de salida: ${sdaTermI}
+⏰ Hora de llegada: ${llgTermI}
+
+😴 DESCANSO: ${recesoValor}
+
+⏰ Hora de salida: ${sdaTermV}
+⏰ Hora de llegada: ${llgTermV}
+
+✍️ Firma del chófer: Pedro
+
+📝 Firma del inspector:
+`.trim();
                 }
 
                 resultPanel.textContent = plantilla;
@@ -1279,6 +1366,7 @@ Fotos ✅
                 actualizarReloj();
                 setInterval(actualizarReloj, 1000);
                 setTimeout(playStartSound, 500);
+                inicializarAutocompletado();
             });
 
             document.querySelectorAll('input, select').forEach(el => {
