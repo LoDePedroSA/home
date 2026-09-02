@@ -616,6 +616,7 @@
                     <option value="primeroJulio">Planilla Primero de Julio S.A.</option>
                     <option value="MOGSM">M.O.G.S.M. S.A.C.</option>
                     <option value="eee">E.E.E. SRL</option>
+                    <option value="condor">CONDOR SRL</option>
                 </select>
             </div>
 
@@ -1327,6 +1328,25 @@ Fotos ✅
 ✍️ Firma del chófer: Pedro
 
 📝 Firma del inspector:
+`.trim();
+                } else if (formato === 'condor') {
+                    const hoy = new Date();
+                    const fechaStr = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
+                    plantilla = `
+*PLANILLA CONDOR SRL*
+*Nombre del chofer:* ${name}
+*Interno:* ${interno}
+*Linea/recorrido:* ${linea || '—'} - ${ramal || '—'}
+*Turno:* noche
+*Vueltas:* 1
+*Horario*
+    *IDA 1:*
+Salida: ${sdaTermI}
+Llegada: ${llgTermI}
+
+*VUELTA 1:*
+Salida: ${sdaTermV}
+Llegada: ${llgTermV}
 `.trim();
                 }
 
