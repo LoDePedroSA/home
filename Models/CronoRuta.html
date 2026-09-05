@@ -607,6 +607,12 @@
                 <input type="text" id="satisfaccion" placeholder="Ej: Excelente" class="autocomplete" autocomplete="off">
             </div>
 
+            <!-- Nuevo campo: Adelanto / Atraso -->
+            <div class="form-group">
+                <label>Adelanto / Atraso (minutos):</label>
+                <input type="text" id="adelanto_atraso" placeholder="Se calcula automáticamente" class="autocomplete" autocomplete="off">
+            </div>
+
             <div class="form-group">
                 <label>Seleccione el formato a completar:</label>
                 <select id="formatoSelect">
@@ -617,6 +623,7 @@
                     <option value="MOGSM">M.O.G.S.M. S.A.C.</option>
                     <option value="eee">E.E.E. SRL</option>
                     <option value="condor">CONDOR SRL</option>
+                    <option value="casanova">Transporte Automotor Casanova S.A</option> <!-- Nuevo -->
                 </select>
             </div>
 
@@ -703,6 +710,7 @@
             const legajoInput = document.getElementById('legajo');
             const intInput = document.getElementById('int');
             const satisfaccionInput = document.getElementById('satisfaccion');
+            const adelantoAtrasoInput = document.getElementById('adelanto_atraso');
 
             const btnIngSrv = document.getElementById('btn-ing-srv');
             const btnSdaTermI = document.getElementById('btn-sda-term-i');
@@ -841,7 +849,29 @@
                 }
                 if (phase === 'vuelta' && vueltaTime + currentElapsed >= totalRouteSeconds && !llgTermVInput.value) {
                     llgTermVInput.value = timeStr;
+                    // Calcular adelanto/atraso al finalizar la vuelta
+                    calcularAdelantoAtraso();
                 }
+            }
+
+            function calcularAdelantoAtraso() {
+                // Solo si contador-si está activo
+                if (localStorage.getItem('valores') !== 'contador-si') return;
+                const realTotal = idaTime + esperaTime + vueltaTime;
+                const programadoTotal = 2 * totalRouteSeconds + esperaDuration;
+                const diffSegundos = realTotal - programadoTotal;
+                const diffMinutos = diffSegundos / 60;
+                let texto = '';
+                if (Math.abs(diffMinutos) < 0.5) {
+                    texto = '0 min (en tiempo)';
+                } else if (diffMinutos > 0) {
+                    texto = `Atraso de ${diffMinutos.toFixed(1)} min`;
+                } else {
+                    texto = `Adelanto de ${Math.abs(diffMinutos).toFixed(1)} min`;
+                }
+                adelantoAtrasoInput.value = texto;
+                // Guardar en localStorage
+                localStorage.setItem('input_adelanto_atraso', texto);
             }
 
             function updateMainButton() {
@@ -878,6 +908,7 @@
                         recesoInput.value = '';
                         sdaTermVInput.value = '';
                         llgTermVInput.value = '';
+                        adelantoAtrasoInput.value = '';
                     }
                     phase = 'ida';
                     currentSegmentStart = Date.now();
@@ -910,6 +941,8 @@
                         const hh = String(now.getHours()).padStart(2, '0');
                         const mm = String(now.getMinutes()).padStart(2, '0');
                         llgTermVInput.value = hh + ':' + mm;
+                        // Calcular adelanto/atraso al finalizar todo
+                        calcularAdelantoAtraso();
                     }
                     updateDisplay();
                 }
@@ -1065,7 +1098,7 @@
             }
 
             function cargarInputs() {
-                const ids = ['name','legajo','int','modelo','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion'];
+                const ids = ['name','legajo','int','modelo','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso'];
                 ids.forEach(id => {
                     const el = document.getElementById(id);
                     if (!el) return;
@@ -1129,7 +1162,6 @@
                 inputs.forEach(input => {
                     const inputId = input.id;
                     if (!inputId) return;
-                    // Crear datalist si no existe
                     let datalist = document.getElementById('datalist_' + inputId);
                     if (!datalist) {
                         datalist = document.createElement('datalist');
@@ -1138,12 +1170,10 @@
                     }
                     input.setAttribute('list', 'datalist_' + inputId);
                     
-                    // Cargar historial al enfocar
                     input.addEventListener('focus', function() {
                         cargarHistorial(inputId);
                     });
                     
-                    // Guardar historial al cambiar
                     input.addEventListener('input', function() {
                         const valor = this.value.trim();
                         if (valor.length > 0) {
@@ -1192,6 +1222,7 @@
                 const llgTermV = document.getElementById('llg-term-v').value;
                 const formato = document.getElementById('formatoSelect').value;
                 const satisfaccion = document.getElementById('satisfaccion').value.trim();
+                const adelantoAtraso = document.getElementById('adelanto_atraso').value.trim();
 
                 if (!name || !interno || !ingSrv || !sdaTermI || !llgTermI || !recesoValor || !sdaTermV || !llgTermV) {
                     alert('⚠️ Por favor, complete todos los campos antes de enviar.');
@@ -1347,6 +1378,34 @@ Llegada: ${llgTermI}
 *VUELTA 1:*
 Salida: ${sdaTermV}
 Llegada: ${llgTermV}
+`.trim();
+                } else if (formato === 'casanova') {
+                    plantilla = `
+Planilla Transporte Automotor Casanova S.A
+
+Linea : ${linea || '—'}
+Chofer : ${name}
+Coche: ${modelo || '—'}
+Interno : ${interno}
+Ramal : ${ramal || '—'}
+IDA
+
+Salida : ${sdaTermI}
+
+llegada: ${llgTermI}
+
+ESPERA
+
+Espera : ${recesoValor} Minutos
+
+VUELTA           
+
+Salida : ${sdaTermV}
+
+Llegada: ${llgTermV}
+
+Incidente : 
+Adelanto o atraso: ${adelantoAtraso || '—'}
 `.trim();
                 }
 
