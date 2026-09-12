@@ -8,7 +8,10 @@ const modelsCatalog = [
     { title: "Acortador de URLS", desc: "Acortador potenciado por Google y GitHub.", link: "https://lodepedrosa.github.io/Acortador_de_URLS/" },
     { title: "Eliminador de Archivos Temporales", desc: "Limpia tu PC de archivos temporales innecesarios.", link: "./Models/Eliminador_de_Archivos_Temporales.zip" },
     { title: "Programar Apagado Automatico", desc: "Programa el apagado de tu PC con opciones personalizadas.", link: "./Models/Programar_apagado_automatico.zip" },
-    { title: "CronoRuta", desc: "Aplicación web para conductores de transporte que integra un cronómetro inteligente de ramales con autocompletado de planillas. Controla los tiempos de ida, espera y vuelta con indicadores visuales, y genera reportes formateados listos para compartir. Ideal para líneas de colectivos y empresas de transporte que necesitan registrar horarios de servicio de manera rápida y profesional.", link: "./Models/CronoRuta.html"}
+    { title: "CronoRuta", desc: "Aplicación web para conductores de transporte que integra un cronómetro inteligente de ramales con autocompletado de planillas. Controla los tiempos de ida, espera y vuelta con indicadores visuales, y genera reportes formateados listos para compartir. Ideal para líneas de colectivos y empresas de transporte que necesitan registrar horarios de servicio de manera rápida y profesional.", link: "./Models/CronoRuta.html"},
+    { title: "EXE - HTML", desc: "Te permite utilizar una pagina web como si fuese una aplicacion de compuetadora.", link: "./Models/EXE_HTML.zip" },
+    { title: "Pixel Art", desc: "Un minijuego de pintar obejor pixel por pixel, podes pintar lo predeterminado o tambien podes crearlos en nuestra herramienta de creacion de pixel arts e importarlo al juegpo para poder pintarlo.", link: "./Models/Pixel Art/Pixel Art.html" },
+    { title: "Creador de Pixel Arts", desc: "Herramienta para crear pixel arts y exportarlos para el minijuego de Pixel Art.", link: "./Models/Pixel Art/Creador de partidas para Pixel Art.html" }
 ];
 
 function buildMarketplaceGrid() {
