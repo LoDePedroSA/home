@@ -104,6 +104,18 @@
             transform: scale(1.05);
         }
 
+        .navbar-btn.red {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: #fff;
+        }
+
+        .navbar-btn.red:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+
         .navbar-btn svg {
             width: 22px;
             height: 22px;
@@ -491,7 +503,12 @@
 
     <div class="container">
         <div class="navbar">
-            <div style="width:42px;"></div>
+            <button class="navbar-btn red" onclick="abrirModalFormato()" aria-label="Cambiar empresa">
+                <svg viewBox="0 0 24 24">
+                    <path d="M7 16V4m0 0L3 8m4-4l4 4"/>
+                    <path d="M17 8v12m0 0l4-4m-4 4l-4-4"/>
+                </svg>
+            </button>
             <div class="navbar-time" id="clockDisplay">--:--</div>
             <button class="navbar-btn" onclick="abrirModalPreferencias()" aria-label="Preferencias">
                 <svg viewBox="0 0 24 24">
@@ -523,8 +540,6 @@
 
         <div class="card">
             <div class="btn-group">
-                <button class="btn btn-outline" onclick="abrirModal('ramal')">📝 Definir ramal</button>
-                <button class="btn btn-outline" onclick="abrirModal('linea')">📝 Definir línea</button>
                 <button class="btn btn-outline" onclick="abrirModal('tiempo')">⏱️ Definir tiempo recorrido</button>
             </div>
             <div style="margin-top:12px;">
@@ -537,27 +552,27 @@
         <div class="card">
             <h3 style="margin-bottom:16px; font-size:1rem; color:var(--accent);">📋 Formulario para completar el formato</h3>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-name">
                 <label>Ingrese su Nombre y Apellido:</label>
                 <input type="text" id="name" placeholder="Ej: Juan Pérez" class="autocomplete" autocomplete="off">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-legajo">
                 <label>Ingrese su legajo:</label>
                 <input type="text" id="legajo" placeholder="Ej: 2001" class="autocomplete" autocomplete="off">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-int">
                 <label>Ingrese su número de interno:</label>
                 <input type="text" id="int" placeholder="Ej: 4521" class="autocomplete" autocomplete="off">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-modelo">
                 <label>Modelo del colectivo (opcional):</label>
                 <input type="text" id="modelo" placeholder="Ej: Mercedes Benz" class="autocomplete" autocomplete="off">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-ing-srv">
                 <label>Horario de Ingreso de Servicio:</label>
                 <div class="input-row">
                     <input type="time" id="ing-srv" autocomplete="off">
@@ -565,7 +580,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-sda-term-i">
                 <label>Horario de Salida de la 1er Cabecera:</label>
                 <div class="input-row">
                     <input type="time" id="sda-term-i" autocomplete="off">
@@ -573,7 +588,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-llg-term-i">
                 <label>Horario de Llegada a la 2da Cabecera:</label>
                 <div class="input-row">
                     <input type="time" id="llg-term-i" autocomplete="off">
@@ -581,12 +596,12 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-receso">
                 <label>Tiempo de descanso (minutos):</label>
                 <input type="number" id="receso" placeholder="Ej: 15" min="0" value="15" autocomplete="off">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-sda-term-v">
                 <label>Horario de Salida hacia la 1er Cabecera:</label>
                 <div class="input-row">
                     <input type="time" id="sda-term-v" autocomplete="off">
@@ -594,7 +609,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-llg-term-v">
                 <label>Horario de Llegada a la 1er Cabecera:</label>
                 <div class="input-row">
                     <input type="time" id="llg-term-v" autocomplete="off">
@@ -602,34 +617,19 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-satisfaccion">
                 <label>Satisfacción (opcional):</label>
                 <input type="text" id="satisfaccion" placeholder="Ej: Excelente" class="autocomplete" autocomplete="off">
             </div>
 
-            <!-- Campos separados de Adelanto / Atraso -->
-            <div class="form-group">
+            <div class="form-group" id="fg-adelanto_atraso_ida">
                 <label>Adelanto / Atraso IDA (minutos):</label>
                 <input type="text" id="adelanto_atraso_ida" placeholder="Se calcula automáticamente" class="autocomplete" autocomplete="off">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="fg-adelanto_atraso_vuelta">
                 <label>Adelanto / Atraso VUELTA (minutos):</label>
                 <input type="text" id="adelanto_atraso_vuelta" placeholder="Se calcula automáticamente" class="autocomplete" autocomplete="off">
-            </div>
-
-            <div class="form-group">
-                <label>Seleccione el formato a completar:</label>
-                <select id="formatoSelect">
-                    <option value="" disabled selected>Seleccione un formato</option>
-                    <option value="linea12">Empresa Linea 12</option>
-                    <option value="merlo">Transportes Unidos de Merlo S.A.</option>
-                    <option value="primeroJulio">Planilla Primero de Julio S.A.</option>
-                    <option value="MOGSM">M.O.G.S.M. S.A.C.</option>
-                    <option value="eee">E.E.E. SRL</option>
-                    <option value="condor">CONDOR SRL</option>
-                    <option value="casanova">Transporte Automotor Casanova S.A</option>
-                </select>
             </div>
 
             <button class="btn btn-primary" style="width:100%;" onclick="completar()">📨 Enviar</button>
@@ -646,6 +646,27 @@
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
                 <button class="btn btn-primary" id="modalConfirm">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="formatoOverlay">
+        <div class="modal">
+            <h3>Seleccionar Empresa / Línea / Ramal</h3>
+            <div class="form-group">
+                <label>Empresa:</label>
+                <select id="empresaSelect"></select>
+            </div>
+            <div class="form-group" id="lineaGroup">
+                <label>Línea:</label>
+                <select id="lineaSelect"></select>
+            </div>
+            <div class="form-group" id="ramalGroup">
+                <label>Ramal:</label>
+                <select id="ramalSelect"></select>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="confirmarFormato()">Confirmar</button>
             </div>
         </div>
     </div>
@@ -678,6 +699,7 @@
         (function(){
             let ramal = '';
             let linea = '';
+            let formatActual = '';
             let totalRouteSeconds = 600;
             let phase = 'idle';
             let mainState = 1;
@@ -692,6 +714,24 @@
             let idaFinalizada = false;
             let isProcessing = false;
             let esperaAutomaticaDisparada = false;
+
+            const EMPRESAS = {
+                callao: { nombre: 'Transportes Callao S.A.', lineas: ['12'], ramales: ['A">"Z'] },
+                primeroJulio: { nombre: 'Primero de Julio S.A.', lineas: ['195'], ramales: ['X Dique Lujan'] },
+                condor: { nombre: 'Condor SRL', lineas: ['L4'], ramales: ['Liniers Directo'] },
+                casanova: { nombre: 'Transporte Automotor Casanova S.A.', lineas: ['208', '11'], ramales: ['Geli - U. de Lomas - San Justo - Est. Isidro Casanova'] },
+                moqsa: { nombre: 'Micro Omnibus Quilmes S.A.', lineas: ['159', '219', '300', '584', '603', '619'], ramales: ['Correo - Berazategui'] }
+            };
+
+            const FORMATO_CAMPOS = {
+                callao: ['name','int','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v'],
+                primeroJulio: ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso_ida','adelanto_atraso_vuelta'],
+                condor: ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v'],
+                casanova: ['name','int','modelo','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','adelanto_atraso_ida','adelanto_atraso_vuelta'],
+                moqsa: ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso_ida','adelanto_atraso_vuelta']
+            };
+
+            const TODOS_CAMPOS = ['name','legajo','int','modelo','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso_ida','adelanto_atraso_vuelta'];
 
             const timeDisplay = document.getElementById('timeDisplay');
             const phaseIndicator = document.getElementById('phaseIndicator');
@@ -712,17 +752,9 @@
             const llgTermVInput = document.getElementById('llg-term-v');
             const recesoInput = document.getElementById('receso');
             const nameInput = document.getElementById('name');
-            const legajoInput = document.getElementById('legajo');
-            const intInput = document.getElementById('int');
             const satisfaccionInput = document.getElementById('satisfaccion');
             const adelantoAtrasoIDAInput = document.getElementById('adelanto_atraso_ida');
             const adelantoAtrasoVUELTAInput = document.getElementById('adelanto_atraso_vuelta');
-
-            const btnIngSrv = document.getElementById('btn-ing-srv');
-            const btnSdaTermI = document.getElementById('btn-sda-term-i');
-            const btnLlgTermI = document.getElementById('btn-llg-term-i');
-            const btnSdaTermV = document.getElementById('btn-sda-term-v');
-            const btnLlgTermV = document.getElementById('btn-llg-term-v');
 
             function playSound(file) {
                 try {
@@ -858,40 +890,35 @@
                 }
             }
 
-            // Cálculo de adelanto/atraso IDA (se llama al finalizar la ida)
             function calcularAdelantoAtrasoIDA() {
                 if (localStorage.getItem('valores') !== 'contador-si') return;
-                // idaTime ya contiene el tiempo real de la ida (sumado en confirmarEspera)
                 const real = idaTime;
                 const programado = totalRouteSeconds;
-                const diffSegundos = real - programado;
-                const diffMinutos = Math.round(diffSegundos / 60);
+                const diffMinutos = Math.round((real - programado) / 60);
                 let texto = '';
                 if (diffMinutos === 0) {
-                    texto = '0 min (en tiempo)';
+                    texto = '0 min';
                 } else if (diffMinutos > 0) {
-                    texto = `Atraso de ${diffMinutos} min`;
+                    texto = '-' + diffMinutos + ' min';
                 } else {
-                    texto = `Adelanto de ${Math.abs(diffMinutos)} min`;
+                    texto = '+' + Math.abs(diffMinutos) + ' min';
                 }
                 adelantoAtrasoIDAInput.value = texto;
                 localStorage.setItem('input_adelanto_atraso_ida', texto);
             }
 
-            // Cálculo de adelanto/atraso VUELTA (se llama al finalizar la vuelta)
             function calcularAdelantoAtrasoVUELTA() {
                 if (localStorage.getItem('valores') !== 'contador-si') return;
                 const real = vueltaTime;
                 const programado = totalRouteSeconds;
-                const diffSegundos = real - programado;
-                const diffMinutos = Math.round(diffSegundos / 60);
+                const diffMinutos = Math.round((real - programado) / 60);
                 let texto = '';
                 if (diffMinutos === 0) {
-                    texto = '0 min (en tiempo)';
+                    texto = '0 min';
                 } else if (diffMinutos > 0) {
-                    texto = `Atraso de ${diffMinutos} min`;
+                    texto = '-' + diffMinutos + ' min';
                 } else {
-                    texto = `Adelanto de ${Math.abs(diffMinutos)} min`;
+                    texto = '+' + Math.abs(diffMinutos) + ' min';
                 }
                 adelantoAtrasoVUELTAInput.value = texto;
                 localStorage.setItem('input_adelanto_atraso_vuelta', texto);
@@ -913,7 +940,7 @@
 
                 if (mainState === 1) {
                     if (!ramal || !linea) {
-                        alert('⚠️ Por favor, defina el ramal y la línea antes de iniciar.');
+                        alert('⚠️ Por favor, defina la empresa, línea y ramal antes de iniciar.');
                         return;
                     }
                     detenerTimer();
@@ -1021,17 +1048,7 @@
                 modalMode = mode;
                 const title = document.getElementById('modalTitle');
                 const input = document.getElementById('modalInput');
-                if (mode === 'ramal') {
-                    title.textContent = 'Definir Ramal';
-                    input.value = ramal;
-                    input.placeholder = 'Ej: R1';
-                    input.type = 'text';
-                } else if (mode === 'linea') {
-                    title.textContent = 'Definir Línea';
-                    input.value = linea;
-                    input.placeholder = 'Ej: 12';
-                    input.type = 'text';
-                } else if (mode === 'tiempo') {
+                if (mode === 'tiempo') {
                     title.textContent = 'Definir tiempo del recorrido (minutos)';
                     input.value = totalRouteSeconds / 60;
                     input.placeholder = 'Ej: 10';
@@ -1048,15 +1065,7 @@
             document.getElementById('modalConfirm').addEventListener('click', () => {
                 const input = document.getElementById('modalInput');
                 const valor = input.value.trim();
-                if (modalMode === 'ramal') {
-                    ramal = valor;
-                    ramalDisplay.textContent = valor || '—';
-                    localStorage.setItem('ramal_guardado', valor);
-                } else if (modalMode === 'linea') {
-                    linea = valor;
-                    lineaDisplay.textContent = valor || '—';
-                    localStorage.setItem('linea_guardado', valor);
-                } else if (modalMode === 'tiempo') {
+                if (modalMode === 'tiempo') {
                     const minutos = parseFloat(valor);
                     if (!isNaN(minutos) && minutos > 0) {
                         totalRouteSeconds = Math.round(minutos * 60);
@@ -1129,10 +1138,6 @@
                     const saved = localStorage.getItem('input_' + id);
                     if (saved) el.value = saved;
                 });
-                const ramalGuardado = localStorage.getItem('ramal_guardado');
-                if (ramalGuardado) { ramal = ramalGuardado; ramalDisplay.textContent = ramalGuardado; }
-                const lineaGuardado = localStorage.getItem('linea_guardado');
-                if (lineaGuardado) { linea = lineaGuardado; lineaDisplay.textContent = lineaGuardado; }
                 const tiempoGuardado = localStorage.getItem('tiempo_guardado');
                 if (tiempoGuardado) {
                     const min = parseFloat(tiempoGuardado);
@@ -1180,7 +1185,6 @@
                 clockDisplay.textContent = hh + ':' + mm;
             }
 
-            // ----- Sistema de autocompletado con historial -----
             function inicializarAutocompletado() {
                 const inputs = document.querySelectorAll('.autocomplete');
                 inputs.forEach(input => {
@@ -1230,10 +1234,110 @@
                 historial[inputId] = valores;
                 localStorage.setItem('autocomplete_history', JSON.stringify(historial));
             }
-            // ------------------------------------------------
+
+            function poblarEmpresas() {
+                const sel = document.getElementById('empresaSelect');
+                sel.innerHTML = '';
+                const blank = document.createElement('option');
+                blank.value = '';
+                blank.textContent = 'Seleccione una empresa';
+                blank.disabled = true;
+                sel.appendChild(blank);
+                Object.keys(EMPRESAS).forEach(key => {
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.textContent = EMPRESAS[key].nombre;
+                    sel.appendChild(opt);
+                });
+            }
+
+            function poblarLineas(empKey) {
+                const sel = document.getElementById('lineaSelect');
+                sel.innerHTML = '';
+                if (!empKey || !EMPRESAS[empKey]) return;
+                EMPRESAS[empKey].lineas.forEach(l => {
+                    const opt = document.createElement('option');
+                    opt.value = l;
+                    opt.textContent = l;
+                    sel.appendChild(opt);
+                });
+            }
+
+            function poblarRamales(empKey) {
+                const sel = document.getElementById('ramalSelect');
+                sel.innerHTML = '';
+                if (!empKey || !EMPRESAS[empKey]) return;
+                EMPRESAS[empKey].ramales.forEach(r => {
+                    const opt = document.createElement('option');
+                    opt.value = r;
+                    opt.textContent = r;
+                    sel.appendChild(opt);
+                });
+            }
+
+            function aplicarCamposVisibles(formato) {
+                const campos = FORMATO_CAMPOS[formato] || [];
+                TODOS_CAMPOS.forEach(id => {
+                    const fg = document.getElementById('fg-' + id);
+                    if (fg) fg.style.display = campos.includes(id) ? '' : 'none';
+                });
+            }
+
+            function abrirModalFormato() {
+                const emp = formatActual || localStorage.getItem('formato_empresa') || '';
+                if (emp && EMPRESAS[emp]) {
+                    document.getElementById('empresaSelect').value = emp;
+                    poblarLineas(emp);
+                    poblarRamales(emp);
+                    const lin = linea || localStorage.getItem('linea_guardado');
+                    const ram = ramal || localStorage.getItem('ramal_guardado');
+                    if (lin) document.getElementById('lineaSelect').value = lin;
+                    if (ram) document.getElementById('ramalSelect').value = ram;
+                } else {
+                    poblarLineas('');
+                    poblarRamales('');
+                }
+                document.getElementById('formatoOverlay').classList.add('active');
+            }
+
+            function confirmarFormato() {
+                const emp = document.getElementById('empresaSelect').value;
+                if (!emp) {
+                    alert('⚠️ Seleccione una empresa.');
+                    return;
+                }
+                const lin = document.getElementById('lineaSelect').value;
+                const ram = document.getElementById('ramalSelect').value;
+                formatActual = emp;
+                linea = lin;
+                ramal = ram;
+                localStorage.setItem('formato_empresa', emp);
+                localStorage.setItem('linea_guardado', lin);
+                localStorage.setItem('ramal_guardado', ram);
+                ramalDisplay.textContent = ram || '—';
+                lineaDisplay.textContent = lin || '—';
+                aplicarCamposVisibles(emp);
+                document.getElementById('formatoOverlay').classList.remove('active');
+            }
+
+            document.getElementById('empresaSelect').addEventListener('change', function() {
+                poblarLineas(this.value);
+                poblarRamales(this.value);
+            });
+
+            document.getElementById('formatoOverlay').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    document.getElementById('formatoOverlay').classList.remove('active');
+                }
+            });
 
             function completar() {
                 guardarDatosChofer();
+                const formato = formatActual;
+                if (!formato) {
+                    alert('⚠️ Por favor, seleccione una empresa.');
+                    return;
+                }
                 const name = document.getElementById('name').value.trim();
                 const legajo = document.getElementById('legajo').value.trim();
                 const interno = document.getElementById('int').value.trim();
@@ -1244,51 +1348,26 @@
                 const recesoValor = document.getElementById('receso').value;
                 const sdaTermV = document.getElementById('sda-term-v').value;
                 const llgTermV = document.getElementById('llg-term-v').value;
-                const formato = document.getElementById('formatoSelect').value;
                 const satisfaccion = document.getElementById('satisfaccion').value.trim();
                 const adelantoAtrasoIDA = document.getElementById('adelanto_atraso_ida').value.trim();
                 const adelantoAtrasoVUELTA = document.getElementById('adelanto_atraso_vuelta').value.trim();
 
-                if (!name || !interno || !ingSrv || !sdaTermI || !llgTermI || !recesoValor || !sdaTermV || !llgTermV) {
+                const requeridosBase = ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v'];
+                if (formato === 'callao') requeridosBase.push('ing-srv','receso');
+                if (formato === 'casanova') requeridosBase.push('receso');
+
+                const faltantes = requeridosBase.filter(id => {
+                    const el = document.getElementById(id);
+                    return el && !el.value.trim();
+                });
+                if (faltantes.length) {
                     alert('⚠️ Por favor, complete todos los campos antes de enviar.');
-                    return;
-                }
-                if (!formato) {
-                    alert('⚠️ Por favor, seleccione un formato.');
                     return;
                 }
 
                 let plantilla = '';
-                if (formato === 'merlo') {
-                    const hoy = new Date();
-                    const fechaStr = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
-                    plantilla = `
-*PLANILLA TRANSPORTES UNIDOS DE MERLO S.A*
 
-*CHOFER*: ${name}
-*LEGAJO*: ${legajo || '—'}
-*INTERNO*: ${interno}
-*RAMAL*: ${ramal || '—'}
-*LINEA*: ${linea || '—'}
-*FECHA*: ${fechaStr}
-
-*RECORRIDO*
-
-*IDA*
-
-*HORARIO SALIDA*: ${sdaTermI}
-*HORARIO LLEGADA*: ${llgTermI}
-
-*ESPERA*: ${recesoValor}
-
-*VUELTA*
-
-*HORARIO DE SALIDA*: ${sdaTermV}
-*HORARIO DE LLEGADA*: ${llgTermV}
-
-*SATISFACCIÓN DE PASAJEROS/%*:
-`.trim();
-                } else if (formato === 'linea12') {
+                if (formato === 'callao') {
                     plantilla = `
 *Planilla✍🏻*
 *Horario de entrada:* ${ingSrv}
@@ -1308,86 +1387,40 @@
 *Línea:* ${linea || '—'}-${ramal || '—'}
 `.trim();
                 } else if (formato === 'primeroJulio') {
+                    const atrasoIda = adelantoAtrasoIDA ? ` (${adelantoAtrasoIDA})` : '';
+                    const atrasoVuelta = adelantoAtrasoVUELTA ? ` (${adelantoAtrasoVUELTA})` : '';
                     plantilla = `
-_*PLANILLA PRIMERO DE JULIO SA*_
+_*PLANILLA*_
 
-Línea: ${linea || '—'}
-
-Nombre: ${name}
-
-Interno: ${interno}
-
-*HORARIOS:*
-
-*IDA:*
-
-Salida: ${sdaTermI}
-
-Llegada: ${llgTermI}
-
-*VUELTA:*
-
-Salida: ${sdaTermV}
-
-Llegada: ${llgTermV}
-`.trim();
-                } else if (formato === 'MOGSM') {
-                    plantilla = `
-*PLANILLA MOGSM*
+_Empresa:_ Primero de Julio S.A
 
 _Nombre del chófer:_ ${name}
 
 _Interno:_ ${interno}
 
-_Línea:_ 707
+_Línea:_ ${linea || '—'}
 
-_Ramal:_ BOULOGNE - SAN ISIDRO
+_Ramal:_ ${ramal || '—'}
 
-*HORARIO:*
+*HORARIO:* (Mañana/Tarde/Noche)
 
 *IDA*
 
 _Salida:_ ${sdaTermI}
 
-_Llegada:_ ${llgTermI}
+_Llegada:_ ${llgTermI}${atrasoIda}
 
-VUELTA
+*VUELTA*
+
 _Salida:_ ${sdaTermV}
 
-_Llegada:_ ${llgTermV}
+_Llegada:_ ${llgTermV}${atrasoVuelta}
 
-_¿Satisfacción?: ${satisfaccion || '_________________'}
+_¿Satisfacción? %:_ ${satisfaccion || '_________________'}
 
-Fotos ✅
-`.trim();
-                } else if (formato === 'eee') {
-                    const hoy = new Date();
-                    const fechaStr = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
-                    plantilla = `
-🚌 E.E.E.SRL
-📋 PLANILLA DE RECORRIDO
-
-👤 Chófer: ${name}
-🚌 Colectivo: ${modelo || '—'}
-🔢 Interno: ${interno}
-🛣️ Línea: 306
-📆 Fecha: ${fechaStr}
-
-⏰ Hora de salida: ${sdaTermI}
-⏰ Hora de llegada: ${llgTermI}
-
-😴 DESCANSO: ${recesoValor}
-
-⏰ Hora de salida: ${sdaTermV}
-⏰ Hora de llegada: ${llgTermV}
-
-✍️ Firma del chófer: Pedro
-
-📝 Firma del inspector:
+_Fotos ✅_
 `.trim();
                 } else if (formato === 'condor') {
-                    const hoy = new Date();
-                    const fechaStr = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
                     plantilla = `
 *PLANILLA CONDOR SRL*
 *Nombre del chofer:* ${name}
@@ -1435,6 +1468,40 @@ Adelanto/Atraso VUELTA: ${adelantoAtrasoVUELTA || '—'}
 
 Incidente : 
 `.trim();
+                } else if (formato === 'moqsa') {
+                    const atrasoIda = adelantoAtrasoIDA ? ` (${adelantoAtrasoIDA})` : '';
+                    const atrasoVuelta = adelantoAtrasoVUELTA ? ` (${adelantoAtrasoVUELTA})` : '';
+                    plantilla = `
+_*PLANILLA*_
+
+_Empresa:_ MOQSA
+
+_Nombre del chófer:_ ${name}
+
+_Interno:_ ${interno}
+
+_Línea:_ ${linea || '—'}
+
+_Ramal:_ ${ramal || '—'}
+
+*HORARIO:* (Mañana/Tarde/Noche)
+
+*IDA*
+
+_Salida:_ ${sdaTermI}
+
+_Llegada:_ ${llgTermI}${atrasoIda}
+
+*VUELTA*
+
+_Salida:_ ${sdaTermV}
+
+_Llegada:_ ${llgTermV}${atrasoVuelta}
+
+_¿Satisfacción? :_ ${satisfaccion || '_________________'}
+
+_Fotos ✅_
+`.trim();
                 }
 
                 resultPanel.textContent = plantilla;
@@ -1463,8 +1530,29 @@ Incidente :
             });
 
             window.addEventListener('load', () => {
+                poblarEmpresas();
+                const empGuardada = localStorage.getItem('formato_empresa');
+                if (empGuardada && EMPRESAS[empGuardada]) {
+                    document.getElementById('empresaSelect').value = empGuardada;
+                    poblarLineas(empGuardada);
+                    poblarRamales(empGuardada);
+                    const lin = localStorage.getItem('linea_guardado');
+                    const ram = localStorage.getItem('ramal_guardado');
+                    if (lin) document.getElementById('lineaSelect').value = lin;
+                    if (ram) document.getElementById('ramalSelect').value = ram;
+                    formatActual = empGuardada;
+                    linea = lin || document.getElementById('lineaSelect').value;
+                    ramal = ram || document.getElementById('ramalSelect').value;
+                    ramalDisplay.textContent = ramal || '—';
+                    lineaDisplay.textContent = linea || '—';
+                    aplicarCamposVisibles(empGuardada);
+                } else {
+                    poblarLineas('');
+                    poblarRamales('');
+                }
                 cargarInputs();
                 aplicarPreferencias();
+                document.getElementById('formatoOverlay').classList.add('active');
                 if (!localStorage.getItem('valores')) {
                     document.getElementById('preferenciasOverlay').classList.add('active');
                 }
@@ -1499,6 +1587,8 @@ Incidente :
             window.copiarAlPortapapeles = copiarAlPortapapeles;
             window.confirmarEspera = confirmarEspera;
             window.mostrarToast = mostrarToast;
+            window.abrirModalFormato = abrirModalFormato;
+            window.confirmarFormato = confirmarFormato;
 
             document.getElementById('esperaModal').addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
