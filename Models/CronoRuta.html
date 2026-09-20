@@ -720,7 +720,8 @@
                 primeroJulio: { nombre: 'Primero de Julio S.A.', lineas: ['195'], ramales: ['X Dique Lujan'] },
                 condor: { nombre: 'Condor SRL', lineas: ['L4'], ramales: ['Liniers Directo'] },
                 casanova: { nombre: 'Transporte Automotor Casanova S.A.', lineas: ['208', '11'], ramales: ['Geli - U. de Lomas - San Justo - Est. Isidro Casanova'] },
-                moqsa: { nombre: 'Micro Omnibus Quilmes S.A.', lineas: ['159', '219', '300', '584', '603', '619'], ramales: ['Correo - Berazategui'] }
+                moqsa: { nombre: 'Micro Omnibus Quilmes S.A.', lineas: ['159', '219', '300', '584', '603', '619'], ramales: ['Correo - Berazategui'] },
+                ochoDeMayo: { nombre: '8 de Mayo', lineas: ['229'], ramales: ['A: San Justo - Plaza de Mayo'] }
             };
 
             const FORMATO_CAMPOS = {
@@ -728,7 +729,8 @@
                 primeroJulio: ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso_ida','adelanto_atraso_vuelta'],
                 condor: ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v'],
                 casanova: ['name','int','modelo','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','adelanto_atraso_ida','adelanto_atraso_vuelta'],
-                moqsa: ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso_ida','adelanto_atraso_vuelta']
+                moqsa: ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso_ida','adelanto_atraso_vuelta'],
+                ochoDeMayo: ['name','int','modelo','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','adelanto_atraso_vuelta']
             };
 
             const TODOS_CAMPOS = ['name','legajo','int','modelo','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso_ida','adelanto_atraso_vuelta'];
@@ -1355,6 +1357,7 @@
                 const requeridosBase = ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v'];
                 if (formato === 'callao') requeridosBase.push('ing-srv','receso');
                 if (formato === 'casanova') requeridosBase.push('receso');
+                if (formato === 'ochoDeMayo') requeridosBase.push('receso');
 
                 const faltantes = requeridosBase.filter(id => {
                     const el = document.getElementById(id);
@@ -1501,6 +1504,32 @@ _Llegada:_ ${llgTermV}${atrasoVuelta}
 _¿Satisfacción? :_ ${satisfaccion || '_________________'}
 
 _Fotos ✅_
+`.trim();
+                } else if (formato === 'ochoDeMayo') {
+                    plantilla = `
+*PLANILLA de 8 de Mayo:*
+
+*Linea:* ${linea || '—'}
+*Chofer:* ${name}
+*Coche:* ${modelo || '—'}
+*Interno:* ${interno}
+*Ramal:* ${ramal || '—'}
+
+*IDA:*
+
+*Salida:* ${sdaTermI}
+*Llegada:* ${llgTermI}
+
+*ESPERA:*
+* Espera: ${recesoValor}
+
+*VUELTA:*
+
+*Salida:* ${sdaTermV}
+*Llegada:* ${llgTermV}
+
+Adelanto/Atraso VUELTA:  ${adelantoAtrasoVUELTA || '—'}
+Incidentes: -
 `.trim();
                 }
 
