@@ -721,7 +721,8 @@
                 condor: { nombre: 'Condor SRL', lineas: ['L4'], ramales: ['Liniers Directo'] },
                 casanova: { nombre: 'Transporte Automotor Casanova S.A.', lineas: ['208', '11'], ramales: ['Geli - U. de Lomas - San Justo - Est. Isidro Casanova'] },
                 moqsa: { nombre: 'Micro Omnibus Quilmes S.A.', lineas: ['159', '219', '300', '584', '603', '619'], ramales: ['Correo - Berazategui'] },
-                ochoDeMayo: { nombre: '8 de Mayo', lineas: ['229'], ramales: ['A: San Justo - Plaza de Mayo'] }
+                laUnionVicenteLopez: { nombre: 'La Union de Vicente Lopez', lineas: ['229'], ramales: ['A: San Justo - Plaza de Mayo'] },
+                chubut: { nombre: 'Empresas C. R. Chubut', lineas: ['229'], ramales: ['A: San Justo - Plaza de Mayo'] }
             };
 
             const FORMATO_CAMPOS = {
@@ -730,7 +731,8 @@
                 condor: ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v'],
                 casanova: ['name','int','modelo','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','adelanto_atraso_ida','adelanto_atraso_vuelta'],
                 moqsa: ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso_ida','adelanto_atraso_vuelta'],
-                ochoDeMayo: ['name','int','modelo','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','adelanto_atraso_vuelta']
+                laUnionVicenteLopez: ['name','int','modelo','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion'],
+                chubut: ['name','int','modelo','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion']
             };
 
             const TODOS_CAMPOS = ['name','legajo','int','modelo','ing-srv','sda-term-i','llg-term-i','receso','sda-term-v','llg-term-v','satisfaccion','adelanto_atraso_ida','adelanto_atraso_vuelta'];
@@ -1357,7 +1359,8 @@
                 const requeridosBase = ['name','int','sda-term-i','llg-term-i','sda-term-v','llg-term-v'];
                 if (formato === 'callao') requeridosBase.push('ing-srv','receso');
                 if (formato === 'casanova') requeridosBase.push('receso');
-                if (formato === 'ochoDeMayo') requeridosBase.push('receso');
+                if (formato === 'laUnionVicenteLopez') requeridosBase.push('receso');
+                if (formato === 'chubut') requeridosBase.push('receso');
 
                 const faltantes = requeridosBase.filter(id => {
                     const el = document.getElementById(id);
@@ -1505,31 +1508,54 @@ _¿Satisfacción? :_ ${satisfaccion || '_________________'}
 
 _Fotos ✅_
 `.trim();
-                } else if (formato === 'ochoDeMayo') {
+                } else if (formato === 'laUnionVicenteLopez') {
                     plantilla = `
-*PLANILLA de 8 de Mayo:*
+_*Planillas La Unión de Vicente Lopez S.A*_
 
-*Linea:* ${linea || '—'}
-*Chofer:* ${name}
-*Coche:* ${modelo || '—'}
-*Interno:* ${interno}
-*Ramal:* ${ramal || '—'}
+*_Chofer: ${name}_* 
+*_Linea:_* ${linea || '—'}
+ *_Ramal:_* ${ramal || '—'}
+*_Interno:_* ${interno}
+*_Turno:_* 
+*_Unidad:_* ${modelo || '—'}
 
-*IDA:*
+*_IDA_*
 
-*Salida:* ${sdaTermI}
-*Llegada:* ${llgTermI}
+*_Salida:_* ${sdaTermI}
+*_Llegada:_* ${llgTermI}
 
-*ESPERA:*
-* Espera: ${recesoValor}
+*_Espera:_* ${recesoValor}
 
-*VUELTA:*
+*_VUELTA_*
 
-*Salida:* ${sdaTermV}
-*Llegada:* ${llgTermV}
+*_Salida:_* ${sdaTermV}
+*_Llegada:_* ${llgTermV}
+*_Satisfaccion:_* ${satisfaccion || '_________________'}
+*_Justificación:_*
+`.trim();
+                } else if (formato === 'chubut') {
+                    plantilla = `
+*PLANILLA:* 
 
-Adelanto/Atraso VUELTA:  ${adelantoAtrasoVUELTA || '—'}
-Incidentes: -
+*CHOFER:* ${name}
+*COCHE N°:* ${modelo || '—'}
+*RAMAL:* ${ramal || '—'}
+*INSPECCIÓN MECANICA:* 
+
+IDA:
+
+*SALIDA:* ${sdaTermI}
+*LLEGADA:* ${llgTermI}
+*ESPERA:* ${recesoValor}
+
+VUELTA:
+
+*SALIDA*: ${sdaTermV}
+*LLEGADA:* ${llgTermV}
+
+*INCONVENIENTES:* 
+*SATISFACCIÓN:* ${satisfaccion || '_________________'}
+*ESTADO DEL COCHE:*
 `.trim();
                 }
 
